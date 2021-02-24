@@ -1,0 +1,211 @@
+calendario
+feriados - dias
+  data   feriado
+01-01 - 0 - null = não
+25-12 - 0 - y = sim
+20-09 -2020 - y - sim
+
+cidades_has_feriados
+data
+id cid
+
+info - firiados nacionais
+
+2020-01-01 - 
+2020-04-10 - Sexta-Feira Santa
+2020-04-21 - Dia de Tiradentes
+2020-05-01 - Dia do Trabalho
+2020-09-07 - Independência do Brasil
+2020-10-12 - Nossa Senhora Aparecida
+2020-11-02 - Dia de Finados
+2020-11-15 - Proclamação da República
+2020-12-25 - Natal
+
+
+
+
+cidades
+id -cid[10] varchar - estado[2] char
+0 - null - null
+1 - join - SC
+2 - SP - SP
+
+
+info ---
+Caron Campina Grande do Sul+
+
+Ac Camargo - SP SP+
+
+IAMSPE SP SP+
+
+HNSG Curitiba (paraná - PR)+
+
+HOSPITAL E PRONTO-SOCORRO DELPHINA RINALDI ABDEL AZIZ (HDRA) Manaus (AM)+
+
+HOSPITAL GERAL DE IPIXUNA DO PARÁ - Ipixuna no Pará (PA)+
+
+CENTRO INTEGRADO DE INCLUSÃO E REABILITAÇÃO (CIIR) em Belém (PA)+
+
+HOSPITAL JEAN BITAR - HJB em Belém  PA+
+
+HOSPITAL GERAL DE TAILÂNDIA - Tailandia no Pará  PA+
+
+HRPL paragominas - pará  (PA)+
+---------------------
+org
+
+
+
+SP SP{
+  Ac Camargo - accma
+  IAMSPE  - bip_iamspe
+
+  25-01-2020 - Aniversário da Cidade
+  20-05-2020 - Antecipação Corpus Christi
+  21-05-2020 - Antecipação Consc. Negra
+  25-05-2020 - Revolução Constitucionalista (Antecipado)
+}
+
+paraná - PR{
+  Campina Grande do Sul{
+    Caron
+  }
+  
+  24/06/2020 - Feriado Municipal
+  14/11/2020 - Feriado Municipal
+
+  Curitiba {
+    HNSG - hspbi_hnsg
+  }
+
+  
+  11-06-2020 - Corpus Christi
+  08-09-2020 - N. Sra da Luz dos Pinhais
+}
+
+Manaus AM{
+  HOSPITAL E PRONTO-SOCORRO DELPHINA RINALDI ABDEL AZIZ (HDRA) - hspbi_indsh
+
+  05-09-2020 - Aniversário do Amazonas
+  07-09-2020 - Independência do Brasil
+  24-10-2020 - Aniversário de Manaus
+  20-11-2020 - Dia da Consciência Negra
+  08-12-2020 - Dia de Nossa Senhora da Conceição
+}
+
+PARÁ - PA{
+  15-08-2020 - Adesão ao Império Brasileiro
+
+  Belém{
+    HOSPITAL JEAN BITAR 
+    CENTRO INTEGRADO DE INCLUSÃO E REABILITAÇÃO
+
+    12-01-2020 - Aniversário de Belém
+    08-12-2020 - Nossa Senhora da Conceição
+  }
+
+  Ipixuna{
+    HOSPITAL GERAL DE IPIXUNA DO PARÁ
+
+    13-12-2020 - Feriado Municipal
+  }
+
+  Tailandia{
+    HOSPITAL GERAL DE TAILÂNDIA 
+    08-12-2020 - Feriado Municipal
+  }
+
+  paragominas{
+    HRPL
+
+    23-01-2020 - Feriado Municipal
+  }
+}
+
+
+
+
+insert into `cidades` (`cidades`,`estado`) VALUES ('','')
+
+CREATE TABLE `hospitais` (
+  `cidades` varchar(10) NOT NULL,
+  `estado` char(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+Caron - {
+  insert into `cidades` (`cidades`,`estado`) VALUES ('Campina Grande do Sul','PR')
+
+  UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-06-24'
+  UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-11-14'
+  
+  24/06/2020 - Feriado Municipal
+  14/11/2020 - Feriado Municipal
+}
+
+
+Indsh - {
+  HOSPITAL JEAN BITAR 
+  HRPL
+  HOSPITAL GERAL DE IPIXUNA DO PARÁ
+  HOSPITAL JEAN BITAR 
+  CENTRO INTEGRADO DE INCLUSÃO E REABILITAÇÃO
+  HOSPITAL E PRONTO-SOCORRO DELPHINA RINALDI ABDEL AZIZ (HDRA)
+  
+  insert into `hospitais` (`hospital`,`cidades`,`estado`) VALUES 
+  ('HRPL','paragominas','PA'),
+  ('CIIR','Belem','PA'),
+  ('HOSPITAL JEAN BITAR','Belem','PA'),
+  ('HGI','Ipixuna','PA'),
+  ('HGT','Tailandia','PA'),
+  ('HDRA','Manaus','AM'),
+
+
+  PA - estado
+  15-08-2020 - Adesão ao Império Brasileiro
+  Belém{
+    HOSPITAL JEAN BITAR 
+    CENTRO INTEGRADO DE INCLUSÃO E REABILITAÇÃO
+
+    12-01-2020 - Aniversário de Belém
+    08-12-2020 - Nossa Senhora da Conceição
+  }
+
+  Ipixuna{
+    HOSPITAL GERAL DE IPIXUNA DO PARÁ - HGI
+
+    13-12-2020 - Feriado Municipal
+  }
+
+  Tailandia{
+    HOSPITAL GERAL DE TAILÂNDIA  - HGT
+    08-12-2020 - Feriado Municipal
+  }
+
+  paragominas{
+    hospital regional público do leste do pará - HRPL
+
+    23-01-2020 - Feriado Municipal
+  }
+  Manaus AM{
+  HOSPITAL E PRONTO-SOCORRO DELPHINA RINALDI ABDEL AZIZ (HDRA) - hspbi_indsh
+
+  05-09-2020 - Aniversário do Amazonas
+  07-09-2020 - Independência do Brasil
+  24-10-2020 - Aniversário de Manaus
+  20-11-2020 - Dia da Consciência Negra
+  08-12-2020 - Dia de Nossa Senhora da Conceição
+}
+}
+
+
+
+feriados nacionais
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-01-01'
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-04-10'
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-04-21'
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-05-01'
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-09-07'
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-10-12'
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-11-02'
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-11-15'
+UPDATE `calendario` SET `feriado`='y' WHERE `data`='2020-12-25'
