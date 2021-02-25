@@ -1,13 +1,16 @@
+#include "celula.h"
 #define ERRO_COORDENADA_INVALIDA -1
 
 typedef struct{
-	int **dados;
-	int linhas, colunas;
+	void **dados;
+	int linhas, colunas,tamInfo;
 } MatrizDinamica;
 
-void inicializa_matriz( MatrizDinamica *p, int l, int c );
-void mostra_matriz( MatrizDinamica m );
+void inicializa_matriz( MatrizDinamica *p, int l, int c,int t);
+void mostra_matriz( MatrizDinamica m ,void (*mostra) (void*));
 void desaloca_matriz( MatrizDinamica *p );
 int modifica_matriz( MatrizDinamica *p, int lin, int col, int valor);
+int get_celula_matriz( MatrizDinamica *p, int lin, int col, Celula *c);
+int get_valor_matriz( MatrizDinamica *p, int lin, int col, void *info);
 int compara_matrizes( MatrizDinamica a, MatrizDinamica b );
 

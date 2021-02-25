@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void inicializa_matriz( MatrizDinamica *p, int l, int c ){
+void inicializa_matriz( MatrizDinamica *p, int l, int c, int t ){
 	p->linhas = l;
 	p->colunas = c;
+	p->tamInfo = t;
 	
-	p->dados = malloc( sizeof(int*) * l );
+	p->dados = malloc( sizeof(void*) * l );
 	int i, j;
 	for( i = 0 ; i < l ; i++ ){
-		p->dados[i] = calloc( c, sizeof(int) );
+		p->dados[i] = calloc( c, t);
 		/*
 		p->dados[i] = malloc( sizeof(int) * c );
 		for( j = 0 ; j < c ; j++)
@@ -18,13 +19,14 @@ void inicializa_matriz( MatrizDinamica *p, int l, int c ){
 	}
 }
 
-void mostra_matriz( MatrizDinamica m ){
+void mostra_matriz( MatrizDinamica m,void (*mostra) (void*) ){
 	int i, j;
 	
 	printf("Dados da matriz (%dx%d):\n", m.linhas, m.colunas);
 	for( i = 0 ; i < m.linhas; i++ ){
 		for( j = 0; j < m.colunas ; j++ )
-			printf("%4d ", m.dados[i][j]);
+			mostra(m.dados[i][j]);
+			// printf("%4d ", m.dados[i][j]);
 		printf("\n");
 	}
 	printf("\n");
@@ -38,13 +40,30 @@ void desaloca_matriz( MatrizDinamica *p ){
 	free( p->dados );
 }
 
-int modifica_matriz( MatrizDinamica *p, int lin, int col, int valor){
+int modifica_matriz( MatrizDinamica *p, int lin, int col, void *valor){
 	if( lin >= p->linhas || col > p->colunas )
 		return ERRO_COORDENADA_INVALIDA;
+	
+	memcpy(p->dados[lin][col],valor,p->tamInfo);
 		
-	p->dados[lin][col] = valor;
+	// p->dados[lin][col] = valor;
 	return 1; // Sucesso.
 }
+
+int get_celula_matriz( MatrizDinamica *p, int lin, int col, Celula *c){
+	if( lin >= p->linhas || col > p->colunas )
+		return ERRO_COORDENADA_INVALIDA;
+	
+	return 1; // Sucesso.
+}
+
+int get_valor_matriz( MatrizDinamica *p, int lin, int col, void *info){
+	if( lin >= p->linhas || col > p->colunas )
+		return ERRO_COORDENADA_INVALIDA;
+	memcpy(info,p->dados[lin][col],p->tamInfo);
+	return 1;
+}
+
 
 int compara_matrizes( MatrizDinamica a, MatrizDinamica b ){
 	if( a.linhas != b.linhas || a.colunas != b.colunas )
