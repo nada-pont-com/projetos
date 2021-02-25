@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Pilha.h"
-#include "Fila2.h"
+#include "FilaP.h"
 
 void mostra(void*);
 void mostra(void *i){
@@ -10,6 +9,7 @@ void mostra(void *i){
 }
 
 int main(int argc, char const *argv[]){
+	printf("ola mundo\n" );
 	Fila fila;
 	inicializa_fila(&fila,10,sizeof(int));
 	for (int i = 0; i < fila.capacidade; ++i){
@@ -18,6 +18,8 @@ int main(int argc, char const *argv[]){
 	mostra_fila(fila,mostra);
 	int i;
 	remover(&fila,&i);
+	mostra_fila(fila,mostra);
+	
 	remover(&fila,&i);
 	mostra_fila(fila,mostra);
 

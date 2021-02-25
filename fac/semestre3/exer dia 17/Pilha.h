@@ -2,17 +2,17 @@
 #define ERRO_PILHA_CHEIA - 2
 
 typedef struct{
-	int *dados;
+	void **dados;
 	int topo;
 	int capacidade;
+	int tamInfo;
 }Pilha;
 
-void inicializa_pilha( Pilha *p, int c );
+void inicializa_pilha( Pilha *p, int c,int t );
 int pilha_vazia( Pilha p );
 int pilha_cheia( Pilha p );
-int empilha( Pilha *p, int info );
-int desempilha( Pilha *p, int *info );
-int le_topo( Pilha p, int *info );
-void mostra_pilha( Pilha p );
-void mostra_pilha_c( Pilha p );
-void desaloca_pilha( Pilha *p );
+int empilha( Pilha *p, void *info );
+int desempilha( Pilha *p, void *info );
+int le_topo( Pilha p, void *info );
+void mostra_pilha( Pilha p , void (*mostra) (void*) );
+void desaloca_pilha( Pilha *p);
