@@ -32,7 +32,7 @@ void mostra_matriz( MatrizDinamica m,void (*mostra) (void*) ){
 	}
 	printf("\n");
 	for( i = 0 ; i < m.linhas; i++ ){
-		printf(" %d ", i);
+		printf("%2d ", i);
 		for( j = 0; j < m.colunas ; j++ ){
 			mostra(m.dados[i] + (j * m.tamInfo));
 			// printf("%4d ", m.dados[i][j]);

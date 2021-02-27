@@ -18,7 +18,7 @@ void posicaoValida(Celula *c,MatrizDinamica m,char*);
 int main(int argc, char const *argv[]){
 	MatrizDinamica caminho;
 	MatrizDinamica visao;
-	int aux,l = 10,c = 20;
+	int aux,l = 20,c = 40;
 	inicializa_matriz(&caminho,l,c,sizeof(char*));
 	inicializa_matriz(&visao,l,c,sizeof(int));
 	srand(time(NULL));
@@ -35,7 +35,7 @@ int main(int argc, char const *argv[]){
 	mostra_matriz(caminho,mostra_c);
 
 	Fila fila;
-	inicializa_fila(&fila,10,sizeof(Celula));
+	inicializa_fila(&fila,30,sizeof(Celula));
 
 	int achou = 0;
 	Celula C;
@@ -46,9 +46,10 @@ int main(int argc, char const *argv[]){
 	posicaoValida(&A,caminho,a);
 	posicaoValida(&B,caminho,a);
 	
-	compara_celula(B,A);
+	if(compara_celula(B,A)){
+		posicaoValida(&B,caminho,a);
+	}
 
-	posicaoValida(&B,caminho,a);
 
 	printf("Inicio:\n");
 	mostrar_celula(A);
@@ -197,7 +198,7 @@ void moldaCaminho(MatrizDinamica *caminho, Celula fim, MatrizDinamica *caminhoFi
 
 void mostra_i(void *i){
 	int *v = i;
-	printf("%5d", *v);
+	printf("%3d", *v);
 }
 
 void mostra_c(void *i){
