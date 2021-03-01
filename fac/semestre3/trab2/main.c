@@ -10,46 +10,181 @@ void mostra_c(void*);
 void mostra_i(void*);
 void mostra_celula(void * celula);
 
+int validaNumero(char *);
+void validaInsert(char *texto,int *resp);
+void preencheLinhaColuna(int *l,int *c);
+int insert(MatrizDinamica *m,int l,int c,char *temp);
+
 void faz(int l,int c, int d,MatrizDinamica *,MatrizDinamica *,Fila *,Celula);
 void moldaCaminho(MatrizDinamica *caminho,Celula fim,MatrizDinamica *caminhoFinal);
 void posicaoValida(Celula *c,MatrizDinamica m,char*);
+int pegaDadosArquivo(FILE *arquivo,MatrizDinamica *caminho);
 
 
 int main(int argc, char const *argv[]){
 	MatrizDinamica caminho;
 	MatrizDinamica visao;
-	int aux,l = 20,c = 40;
-	inicializa_matriz(&caminho,l,c,sizeof(char*));
-	inicializa_matriz(&visao,l,c,sizeof(int));
-	srand(time(NULL));
-	// mostra_matriz(caminho,mostra_c);
-	for (int i = 0; i < l; ++i){
-		for (int j = 0; j < c; ++j){
-			char a[5] = {' ','\0'};
-			if((rand() % 100) < 20){
-				strcpy(a,"[ ]");
-			}
-			modifica_matriz(&caminho,i,j,&a);
-		}
-	}
-	mostra_matriz(caminho,mostra_c);
+	
+	int aux,l,c,n = 0;
+	int opcao;
+
+	char auxChar[5];
 
 	Fila fila;
 	inicializa_fila(&fila,30,sizeof(Celula));
 
-	int achou = 0;
 	Celula C;
-	
 	Celula A;
 	Celula B;
+	int achou = 0;
 	char a[5];
+
+	int valida;
+	do{
+		valida = 0;
+		do{
+			validaInsert("Preencher o mapa:\n1 - Manual\n2 - Automatico\n3 - Arquivo texto\n",&opcao);
+			/*opcao = 1;
+			printf("Preencher o mapa:\n1 - Manual\n2 - Automatico\n3 - Arquivo texto\n");
+		    gets(auxChar);
+		    aux = validaNumero(auxChar);
+		    if(aux){
+		        opcao = atoi(auxChar);
+		    }else
+		    	printf("Digite um valor valido\n");*/
+		} while (opcao>3 || opcao<1);
+
+		if(opcao==2){
+			preencheLinhaColuna(&l,&c);
+			inicializa_matriz(&caminho,l,c,sizeof(char*));
+			inicializa_matriz(&visao,l,c,sizeof(int));
+
+			srand(time(NULL));
+			// mostra_matriz(caminho,mostra_c);
+			for (int i = 0; i < l; ++i){
+				for (int j = 0; j < c; ++j){
+					char a[5] = {' ','\0'};
+					if((rand() % 100) < 20){
+						strcpy(a,"[ ]");
+					}
+					modifica_matriz(&caminho,i,j,&a);
+				}
+			}
+		}else if(opcao == 3){
+	    	FILE *arquivo = NULL;
+
+			do{
+				aux = 1;
+				printf("Digite o nome do arquivo. Ex: arquivo\n");
+			    gets(auxChar);
+			    
+			    char nameFile[strlen(auxChar)+4]; 
+			    strcpy(nameFile,auxChar);
+			    strcat(nameFile,".txt");
+
+		        arquivo = fopen(nameFile,"r");
+
+		        if(arquivo==NULL){
+		        	/*do{
+			        	printf("Arquivo não encontrado.\n1 - Tentar novamente\n2 - Trocar opção\n");
+			        	gets(auxChar);
+			        	aux = validaNumero(auxChar);
+			        	if(aux){
+			        		opcao = atoi(auxChar);
+			        	}
+		        	} while (!aux);*/
+		        	validaInsert("Arquivo não encontrado.\n1 - Tentar novamente\n2 - Trocar opção\n",&opcao);
+
+		        	if(opcao == 1){
+		        		aux = 0;
+		        	}else
+		        		valida = 1;
+		        }
+			} while (!aux);
+
+			if(!(feof(arquivo))){
+				char texto[20];
+				char *temp;
+				fgets(texto,20,arquivo);
+	        	temp = strtok(texto, " ");
+				
+	        	aux = validaNumero(temp);
+	        	printf("%s\n", temp);
+	        	if(!aux){
+	        		valida = 1;
+	        	}else{
+	        		l = atoi(temp);
+	        		if(l<1){
+	        			valida = 1;
+	        		}
+	        	}
+
+	        	temp = strtok(0, " ");
+	        	aux = validaNumero(temp);
+	        	printf("%s\n", temp);
+	        	printf("%d\n", strlen(temp));
+	        	printf("%d\n", aux);
+	        	if(!aux || valida){
+	        		valida = 1;
+	        	}else{
+	        		c = atoi(temp);
+	        		if(l<1){
+	        			valida = 1;
+	        		}
+	        	}
+
+	        	printf("l:%d || c:%d\n",l,c );
+
+			}else{
+				valida = 1;
+			}
+			
+			if(!valida){
+				inicializa_matriz(&caminho,l,c,sizeof(char*));
+				inicializa_matriz(&visao,l,c,sizeof(int));
+			}
+
+			if(!valida && !pegaDadosArquivo(arquivo,&caminho)){
+				printf("Erro ao tenar inserir dados no mapa.\n");
+				valida = 1;
+			}
+
+
+		}else{
+			preencheLinhaColuna(&l,&c);
+			inicializa_matriz(&caminho,l,c,sizeof(char*));
+			inicializa_matriz(&visao,l,c,sizeof(int));
+			printf("Coloque 0 para paredes e 1 para o caminho:\n");	
+			for (int i = 0; i < l; ++i){
+				for (int j = 0; j < c; ++j){
+					do{
+						printf("Valor da linha %d e coluna %d\n", i, j);
+						int vl;
+						gets(auxChar);
+						aux = validaNumero(auxChar);
+						if(aux){
+							vl= atoi(auxChar);
+							if(vl==0 || vl==1){
+								strcpy(auxChar, vl ? " " : "[ ]");
+								modifica_matriz(&caminho,i,j,auxChar);
+							}else{
+								aux = 0;
+							}
+						}else
+							printf("Valor invado\n" );
+					} while (!aux);
+				}
+			}
+		}
+	}while(valida);
+	mostra_matriz(caminho,mostra_c);
+
 	posicaoValida(&A,caminho,a);
 	posicaoValida(&B,caminho,a);
 	
 	if(compara_celula(B,A)){
 		posicaoValida(&B,caminho,a);
 	}
-
 
 	printf("Inicio:\n");
 	mostrar_celula(A);
@@ -59,6 +194,9 @@ int main(int argc, char const *argv[]){
 	inserir(&fila,&A);
 	int dist = 0;
 	while(!fila_vazia(fila) && !achou){
+		if(fila.n>n){
+			n = fila.n;
+		}
 		remover(&fila,&C);
 		// mostra_fila(fila,mostra_celula);
 		if(compara_celula(C,B)){
@@ -75,14 +213,85 @@ int main(int argc, char const *argv[]){
 		}
 	}
 
+	printf("%d\n", n);
+
 	mostra_matriz(visao,mostra_i);
 
 	moldaCaminho(&visao,B,&caminho);
 
 	mostra_matriz(caminho,mostra_c);
 
-
 	return 0;
+}
+
+void preencheLinhaColuna(int *l,int *c){
+	char auxChar[5];
+	int aux;
+	do{
+		printf("Qual o numero de linhas do mapa:\n");
+	    gets(auxChar);
+	    aux = validaNumero(auxChar);
+	    if(aux){
+	        *l = atoi(auxChar);
+	    }else
+			printf("Digite um valor valido\n");
+	} while (!aux);
+
+	do{
+		printf("Qual o numero de colunas do mapa:\n");
+	    gets(auxChar);
+	    aux = validaNumero(auxChar);
+	    if(aux){
+	        *c = atoi(auxChar);
+	    }else
+	    	printf("Digite um valor valido\n");
+	} while (!aux);
+}
+
+int pegaDadosArquivo(FILE *arquivo,MatrizDinamica *caminho){
+	int l = 0,aux = 1,vl,c = 0;
+    char texto[50];
+    char *temp;
+    int cont = 0;
+	while (!(feof(arquivo)) && aux && posicao_valida_matriz(*caminho,l,c)!=ERRO_COORDENADA_INVALIDA){
+        fgets(texto,20,arquivo);
+        printf("Texto : %s\n", texto);
+        temp = strtok(texto, " ");
+        cont = 0;
+        c = 0;
+    	insert(caminho,l,c,temp);
+
+        while((temp = strtok(0, " ")) != 0){
+        	c++;
+        	insert(caminho,l,c,temp);
+        }
+        l++;
+	}
+
+	mostra_matriz(*caminho,mostra_c);
+	printf("\n\n\n\n");
+
+	return aux;
+}
+
+int insert(MatrizDinamica *caminho,int l,int c,char *temp){
+	char texto[20];
+	int vl,aux;
+	aux = validaNumero(temp);
+	printf("temp :%s\naux:%d\nextra: %d\n", temp,aux,atoi(temp));
+
+	if(!aux || (aux && (atoi(temp)<0 || atoi(temp)>1))){
+		aux = 0;
+		printf("ola\n");
+		return 0;
+	}
+	vl = atoi(temp);
+	strcpy(texto, vl ? " " : "[ ]");
+	printf("Texto :%s\nVl:%d\n", texto,vl);
+	printf("linha :%d\ncoluna:%d\n", l,c);
+	aux = modifica_matriz(caminho,l,c,&texto);
+	printf("\n\n");
+	return 1;
 }
 
 void posicaoValida(Celula *cel,MatrizDinamica m, char *aux){
@@ -112,13 +321,6 @@ void faz(int l,int c, int dist,MatrizDinamica *caminho,MatrizDinamica *visao,Fil
 		inserir(fila,&C);
 	}
 	free(aux2);
-}
-
-void mostra_celula(void * celula){
-	Celula *v = celula;
-	printf("dist: %d\n", v->dist);
-	printf("linha: %d\n", v->linha);
-	printf("coluna: %d\n", v->coluna);
 }
 
 void moldaCaminho(MatrizDinamica *caminho, Celula fim, MatrizDinamica *caminhoFinal){
@@ -195,6 +397,42 @@ void moldaCaminho(MatrizDinamica *caminho, Celula fim, MatrizDinamica *caminhoFi
 	free(a);
 }
 
+int validaNumero(char *numero){
+	if(strlen(numero)==0) return 0;
+    for (int i = 0; i < strlen(numero); i++){
+        if((i==0) && ((numero[i]=='-') || (numero[i]=='+'))){
+            continue;
+        }
+        if( !( (numero[i]>='0') && (numero[i]<='9') ) && (numero[i]==' ' && (i+1)== strlen(numero))){
+        	// printf("%d:%d:%c\n",i,numero[i],numero[i]);
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void validaInsert(char *texto,int *resp){
+	char auxChar[5];
+	int aux;
+	do{
+		*resp = 1;
+		printf("%s",texto);
+	    gets(auxChar);
+	    aux = validaNumero(auxChar);
+	    if(aux){
+	        *resp = atoi(auxChar);
+	    }else
+	    	printf("Digite um valor valido\n");
+	} while (!aux);
+}
+
+void mostra_celula(void * celula){
+	Celula *v = celula;
+	mostrar_celula(*v);
+	// printf("dist: %d\n", v->dist);
+	// printf("linha: %d\n", v->linha);
+	// printf("coluna: %d\n", v->coluna);
+}
 
 void mostra_i(void *i){
 	int *v = i;
