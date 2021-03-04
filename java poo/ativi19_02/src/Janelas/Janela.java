@@ -1,7 +1,5 @@
 package Janelas;
 
-//import Interface.Programas.Contador;
-
 import Programas.Contador;
 
 import javax.swing.*;

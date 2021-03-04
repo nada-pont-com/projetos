@@ -186,17 +186,14 @@ int main(int argc, char const *argv[]){
 		posicaoValida(&B,caminho,a);
 	}
 
-	printf("Inicio:\n");
-	mostrar_celula(A);
-	printf("Fim:\n");
-	mostrar_celula(B);
+	// printf("Inicio:\n");
+	// mostrar_celula(A);
+	// printf("Fim:\n");
+	// mostrar_celula(B);
 
 	inserir(&fila,&A);
 	int dist = 0;
 	while(!fila_vazia(fila) && !achou){
-		if(fila.n>n){
-			n = fila.n;
-		}
 		remover(&fila,&C);
 		// mostra_fila(fila,mostra_celula);
 		if(compara_celula(C,B)){
@@ -212,14 +209,16 @@ int main(int argc, char const *argv[]){
 			}
 		}
 	}
+	
+	if(achou){
+		printf("A distancia do ponto A(%d,%d) ate o ponto B(%d,%d) e %d\n",A.linha,A.coluna,B.linha,B.coluna,dist);
 
-	printf("%d\n", n);
+		moldaCaminho(&visao,B,&caminho);
+		mostra_matriz(caminho,mostra_c);
+	}else{
+		printf("Nao tem caminho possivel do ponto A(%d,%d) ate o ponto B(%d,%d)\n",A.linha,A.coluna,B.linha,B.coluna);
+	}
 
-	mostra_matriz(visao,mostra_i);
-
-	moldaCaminho(&visao,B,&caminho);
-
-	mostra_matriz(caminho,mostra_c);
 
 	return 0;
 }
