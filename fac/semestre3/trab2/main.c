@@ -14,6 +14,7 @@ int validaNumero(char *);
 void validaInsert(char *texto,int *resp);
 void preencheLinhaColuna(int *l,int *c);
 int insert(MatrizDinamica *m,int l,int c,char *temp);
+int pegaPosicaoIniFim(FILE *arquivo,Celula *ini,Celula *fim,MatrizDinamica caminho);
 
 void faz(int l,int c, int d,MatrizDinamica *,MatrizDinamica *,Fila *,Celula);
 void moldaCaminho(MatrizDinamica *caminho,Celula fim,MatrizDinamica *caminhoFinal);
@@ -40,6 +41,8 @@ int main(int argc, char const *argv[]){
 	char a[5];
 
 	int valida;
+	srand(time(NULL));
+
 	do{
 		valida = 0;
 		do{
@@ -59,7 +62,6 @@ int main(int argc, char const *argv[]){
 			inicializa_matriz(&caminho,l,c,sizeof(char*));
 			inicializa_matriz(&visao,l,c,sizeof(int));
 
-			srand(time(NULL));
 			// mostra_matriz(caminho,mostra_c);
 			for (int i = 0; i < l; ++i){
 				for (int j = 0; j < c; ++j){
@@ -149,6 +151,8 @@ int main(int argc, char const *argv[]){
 				valida = 1;
 			}
 
+			pegaPosicaoIniFim(arquivo,&A,&B,caminho);
+
 
 		}else{
 			preencheLinhaColuna(&l,&c);
@@ -158,7 +162,7 @@ int main(int argc, char const *argv[]){
 			for (int i = 0; i < l; ++i){
 				for (int j = 0; j < c; ++j){
 					do{
-						printf("Valor da linha %d e coluna %d\n", i, j);
+						printf("Valor da linha %d e coluna %d\n", i+1, j+1);
 						int vl;
 						gets(auxChar);
 						aux = validaNumero(auxChar);
@@ -219,7 +223,6 @@ int main(int argc, char const *argv[]){
 		printf("Nao tem caminho possivel do ponto A(%d,%d) ate o ponto B(%d,%d)\n",A.linha,A.coluna,B.linha,B.coluna);
 	}
 
-
 	return 0;
 }
 
@@ -252,44 +255,62 @@ int pegaDadosArquivo(FILE *arquivo,MatrizDinamica *caminho){
     char texto[50];
     char *temp;
     int cont = 0;
-	while (!(feof(arquivo)) && aux && posicao_valida_matriz(*caminho,l,c)!=ERRO_COORDENADA_INVALIDA){
+	while ((l==caminho->linhas && c==caminho->linhas) &&  !(feof(arquivo)) && aux && posicao_valida_matriz(*caminho,l,c)!=ERRO_COORDENADA_INVALIDA){
         fgets(texto,20,arquivo);
-        printf("Texto : %s\n", texto);
+        // printf("Texto : %s\n", texto);
         temp = strtok(texto, " ");
         cont = 0;
         c = 0;
-    	insert(caminho,l,c,temp);
+    	aux = insert(caminho,l,c,temp);
 
-        while((temp = strtok(0, " ")) != 0){
+        while((temp = strtok(0, " ")) != 0 && aux){
         	c++;
-        	insert(caminho,l,c,temp);
+        	aux = insert(caminho,l,c,temp);
         }
         l++;
 	}
 
-	mostra_matriz(*caminho,mostra_c);
-	printf("\n\n\n\n");
+	// mostra_matriz(*caminho,mostra_c);
 
 	return aux;
+}
+
+int pegaPosicaoIniFim(FILE *arquivo,Celula *ini,Celula *fim,MatrizDinamica caminho){
+	int aux = 1;
+	char* temp;
+	char texto[20];
+	while ( !(feof(arquivo)) && aux){
+		fgets(texto,20,arquivo);
+
+        temp = strtok(texto, " ");
+
+		aux = validaNumero(temp);
+		
+		temp = strtok(0, " ");
+		
+		if(!aux || (aux && atoi(temp)<0)){
+			
+		}
+	}
 }
 
 int insert(MatrizDinamica *caminho,int l,int c,char *temp){
 	char texto[20];
 	int vl,aux;
 	aux = validaNumero(temp);
-	printf("temp :%s\naux:%d\nextra: %d\n", temp,aux,atoi(temp));
+	// printf("temp :%s\naux:%d\nextra: %d\n", temp,aux,atoi(temp));
 
 	if(!aux || (aux && (atoi(temp)<0 || atoi(temp)>1))){
 		aux = 0;
-		printf("ola\n");
+		// printf("ola\n");
 		return 0;
 	}
 	vl = atoi(temp);
 	strcpy(texto, vl ? " " : "[ ]");
-	printf("Texto :%s\nVl:%d\n", texto,vl);
-	printf("linha :%d\ncoluna:%d\n", l,c);
+	// printf("Texto :%s\nVl:%d\n", texto,vl);
+	// printf("linha :%d\ncoluna:%d\n", l,c);
 	aux = modifica_matriz(caminho,l,c,&texto);
-	printf("\n\n");
+	// printf("\n\n");
 	return 1;
 }
 
@@ -306,14 +327,14 @@ void posicaoValida(Celula *cel,MatrizDinamica m, char *aux){
 
 void faz(int l,int c, int dist,MatrizDinamica *caminho,MatrizDinamica *visao,Fila *fila,Celula inicio){
 	int aux,val;
-	char *aux2 = malloc(sizeof(char)*3);
+	char *aux2 = malloc(sizeof(char)*4);
 	get_valor_matriz(caminho,l,c,aux2);
 	val = get_valor_matriz(visao,l,c,&aux);
 	
 	if(val==1 && !strcmp(aux2," ") && aux==0 && (l!=inicio.linha || c!=inicio.coluna)){
 		modifica_matriz(visao,l,c,&dist);
 		// printf("%d\n", dist);
-		get_valor_matriz(visao,l,c,&dist);
+		// get_valor_matriz(visao,l,c,&dist);
 		// printf("%d\n", dist);
 		Celula C;
 		inserir_celula(&C,l,c,dist);

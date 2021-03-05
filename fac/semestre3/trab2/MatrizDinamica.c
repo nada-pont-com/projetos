@@ -9,7 +9,7 @@ void inicializa_matriz( MatrizDinamica *p, int l, int c, int t ){
 	p->tamInfo = t;
 	
 	p->dados =  malloc( sizeof(void**) * l);
-	int i, j;
+	int i;//, j;
 	
 	for( i = 0 ; i < l ; i++ ){
 		// p->dados[i] = malloc( sizeof(void*) * c);
@@ -85,15 +85,15 @@ int get_valor_matriz( MatrizDinamica *p, int lin, int col, void *info){
 
 int compara_matrizes( MatrizDinamica a, MatrizDinamica b ){
 	if( a.linhas != b.linhas || a.colunas != b.colunas )
-		return 0; // Falso, pois têm dimensões diferentes.
+		return 0; // Falso, pois tï¿½m dimensï¿½es diferentes.
 	
 	int i, j;
 	for( i = 0 ; i < a.linhas; i++ )
 		for( j = 0; j < a.colunas ; j++ )
 			// if( a.dados[i][j] != b.dados[i][j] )
-				return 0; // Falso, pois há pelo menos um valor diferente.
+				return 0; // Falso, pois hï¿½ pelo menos um valor diferente.
 	
-	return 1; // Verdadeiro, pois é tudo igual (dimensões e valores)
+	return 1; // Verdadeiro, pois ï¿½ tudo igual (dimensï¿½es e valores)
 }
 
 
