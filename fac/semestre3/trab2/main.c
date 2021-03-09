@@ -182,7 +182,7 @@ int main(int argc, char const *argv[]){
 		}
 	}while(valida);
 	mostra_matriz(caminho,mostra_c);
-
+	
 	posicaoValida(&A,caminho,a);
 	posicaoValida(&B,caminho,a);
 	
