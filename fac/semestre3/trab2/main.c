@@ -15,12 +15,13 @@ void validaInsert(char *texto,int *resp);
 void preencheLinhaColuna(int *l,int *c);
 int insert(MatrizDinamica *m,int l,int c,char *temp);
 int pegaPosicaoIniFim(FILE *arquivo,Celula *ini,Celula *fim,MatrizDinamica caminho);
+void getPosicao(Celula *a,int l,int c);
 
 void faz(int l,int c, int d,MatrizDinamica *,MatrizDinamica *,Fila *,Celula);
 void moldaCaminho(MatrizDinamica *caminho,Celula fim,MatrizDinamica *caminhoFinal);
 void posicaoValida(Celula *c,MatrizDinamica m,char*);
+int validaPosicao(Celula *cel,MatrizDinamica m, char *aux);
 int pegaDadosArquivo(FILE *arquivo,MatrizDinamica *caminho);
-
 
 int main(int argc, char const *argv[]){
 	MatrizDinamica caminho;
@@ -71,6 +72,12 @@ int main(int argc, char const *argv[]){
 					}
 					modifica_matriz(&caminho,i,j,&a);
 				}
+			}
+			posicaoValida(&A,caminho,a);
+			posicaoValida(&B,caminho,a);
+			
+			if(compara_celula(B,A)){
+				posicaoValida(&B,caminho,a);
 			}
 		}else if(opcao == 3){
 	    	FILE *arquivo = NULL;
@@ -179,16 +186,21 @@ int main(int argc, char const *argv[]){
 					} while (!aux);
 				}
 			}
+			do{
+				printf("Inicio do caminho:\n");
+				getPosicao(&A,l,c);
+
+				printf("posição final do caminho:\n");
+				getPosicao(&B,l,c);
+				
+				if(aux = compara_celula(A,B)){
+					printf("Valor iniciol igual ao final\n");
+				}
+			} while (aux);
+			
 		}
 	}while(valida);
 	mostra_matriz(caminho,mostra_c);
-	
-	posicaoValida(&A,caminho,a);
-	posicaoValida(&B,caminho,a);
-	
-	if(compara_celula(B,A)){
-		posicaoValida(&B,caminho,a);
-	}
 
 	// printf("Inicio:\n");
 	// mostrar_celula(A);
@@ -429,6 +441,28 @@ int validaNumero(char *numero){
         }
     }
     return 1;
+}
+
+void getPosicao(Celula *a,int l,int c){
+	int aux;
+	char auxChar[5];
+	do{
+		printf("Digite uma linha:\n");
+		gets(auxChar);
+		aux = validaNumero(auxChar);
+		if(aux){
+			a->linha= atoi(auxChar);
+		}
+	} while (!aux || a->linha<0 || a->linha>l);
+
+	do{
+		printf("Digite uma coluna:\n");
+		gets(auxChar);
+		aux = validaNumero(auxChar);
+		if(aux){
+			a->coluna= atoi(auxChar);
+		}
+	} while (!aux || a->coluna<0 || a->coluna>c);
 }
 
 void validaInsert(char *texto,int *resp){
