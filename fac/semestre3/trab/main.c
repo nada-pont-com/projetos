@@ -33,6 +33,7 @@ int main(){
 		if(erro) break;
 		x[0] = string[i];
 		switch(string[i]){
+			
 			case ' ':
 				if(num>0) num = -3;
 				break;

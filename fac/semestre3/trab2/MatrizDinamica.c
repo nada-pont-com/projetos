@@ -12,7 +12,6 @@ void inicializa_matriz( MatrizDinamica *p, int l, int c, int t ){
 	int i;//, j;
 	
 	for( i = 0 ; i < l ; i++ ){
-		// p->dados[i] = malloc( sizeof(void*) * c);
 		p->dados[i] = calloc( c , t);
 		/*
 		p->dados[i] = malloc( sizeof(int) * c );
@@ -26,13 +25,13 @@ void mostra_matriz( MatrizDinamica m,void (*mostra) (void*) ){
 	int i, j;
 	
 	printf("Dados da matriz (%dx%d):\n", m.linhas, m.colunas);
-	printf(" + ");	
+	printf("  + ");	
 	for( j = 0; j < m.colunas ; j++ ){
-		printf("%2d ", j);
+		printf("%2d ", j+1);
 	}
 	printf("\n");
 	for( i = 0 ; i < m.linhas; i++ ){
-		printf("%2d ", i);
+		printf("%3d ", i+1);
 		for( j = 0; j < m.colunas ; j++ ){
 			mostra(m.dados[i] + (j * m.tamInfo));
 			// printf("%4d ", m.dados[i][j]);

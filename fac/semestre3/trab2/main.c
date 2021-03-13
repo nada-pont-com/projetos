@@ -6,6 +6,8 @@
 #include "Fila.h"
 #include "MatrizDinamica.h"
 
+// Integrantes : Vinicius Dall Olivo Gonçalves e Ana Luiza Croce de Miranda
+
 void mostra_c(void*);
 void mostra_i(void*);
 void mostra_celula(void * celula);
@@ -14,7 +16,7 @@ int validaNumero(char *);
 void validaInsert(char *texto,int *resp);
 void preencheLinhaColuna(int *l,int *c);
 int insert(MatrizDinamica *m,int l,int c,char *temp);
-int pegaPosicaoIniFim(FILE *arquivo,Celula *ini,Celula *fim,MatrizDinamica caminho);
+int pegaPosicaoIniFim(FILE *arquivo,Celula *c,MatrizDinamica caminho);
 void getPosicao(Celula *a,int l,int c);
 
 void faz(int l,int c, int d,MatrizDinamica *,MatrizDinamica *,Fila *,Celula);
@@ -38,6 +40,8 @@ int main(int argc, char const *argv[]){
 	Celula C;
 	Celula A;
 	Celula B;
+	inserir_celula(&A,0,0,0);
+	inserir_celula(&B,0,0,0);
 	int achou = 0;
 	char a[5];
 
@@ -73,12 +77,26 @@ int main(int argc, char const *argv[]){
 					modifica_matriz(&caminho,i,j,&a);
 				}
 			}
-			posicaoValida(&A,caminho,a);
-			posicaoValida(&B,caminho,a);
+			// posicaoValida(&A,caminho,a);
+			// posicaoValida(&B,caminho,a);
 			
-			if(compara_celula(B,A)){
-				posicaoValida(&B,caminho,a);
-			}
+			// if(compara_celula(B,A)){
+			// 	posicaoValida(&B,caminho,a);
+			// }
+			printf("Caminho gerado:\n");
+			mostra_matriz(caminho,mostra_c);
+
+			do{
+				printf("Inicio do caminho:\n");
+				getPosicao(&A,l,c);
+
+				printf("posição final do caminho:\n");
+				getPosicao(&B,l,c);
+				
+				if(aux = compara_celula(A,B)){
+					printf("Valor iniciol igual ao final\n");
+				}
+			} while (aux);
 		}else if(opcao == 3){
 	    	FILE *arquivo = NULL;
 
@@ -142,11 +160,15 @@ int main(int argc, char const *argv[]){
 	        		}
 	        	}
 
-	        	printf("l:%d || c:%d\n",l,c );
+	        	printf("l:%d || c:%d\n",l,c);
+	        	printf("valida:%d\n",valida);
 
 			}else{
 				valida = 1;
 			}
+
+			printf("valida:%d\n",valida);
+
 			
 			if(!valida){
 				inicializa_matriz(&caminho,l,c,sizeof(char*));
@@ -158,7 +180,8 @@ int main(int argc, char const *argv[]){
 				valida = 1;
 			}
 
-			pegaPosicaoIniFim(arquivo,&A,&B,caminho);
+			printf("t:%d\n",pegaPosicaoIniFim(arquivo,&A,caminho));
+			printf("t2:%d\n",pegaPosicaoIniFim(arquivo,&B,caminho));
 
 
 		}else{
@@ -200,6 +223,7 @@ int main(int argc, char const *argv[]){
 			
 		}
 	}while(valida);
+	printf("Caminho: \n");
 	mostra_matriz(caminho,mostra_c);
 
 	// printf("Inicio:\n");
@@ -212,13 +236,12 @@ int main(int argc, char const *argv[]){
 	while(!fila_vazia(fila) && !achou){
 		remover(&fila,&C);
 		// mostra_fila(fila,mostra_celula);
+		l = C.linha;
+		c = C.coluna;
+		dist = C.dist;
 		if(compara_celula(C,B)){
 			achou = 1;
 		}else{
-
-			l = C.linha;
-			c = C.coluna;
-			dist = C.dist;
 			for (int i = -1; i <= 1; i+=2){
 				faz(l+i,c,dist+1,&caminho,&visao,&fila,A);
 				faz(l,c+i,dist+1,&caminho,&visao,&fila,A);
@@ -226,13 +249,14 @@ int main(int argc, char const *argv[]){
 		}
 	}
 	
+	mostra_matriz(visao,mostra_i);
 	if(achou){
-		printf("A distancia do ponto A(%d,%d) ate o ponto B(%d,%d) e %d\n",A.linha,A.coluna,B.linha,B.coluna,dist);
+		printf("A distancia do ponto A(%d,%d) ate o ponto B(%d,%d) e %d\n",A.linha+1,A.coluna+1,B.linha+1,B.coluna+1,dist);
 
 		moldaCaminho(&visao,B,&caminho);
 		mostra_matriz(caminho,mostra_c);
 	}else{
-		printf("Nao tem caminho possivel do ponto A(%d,%d) ate o ponto B(%d,%d)\n",A.linha,A.coluna,B.linha,B.coluna);
+		printf("Nao tem caminho possivel do ponto A(%d,%d) ate o ponto B(%d,%d)\n",A.linha+1,A.coluna+1,B.linha+1,B.coluna+1);
 	}
 
 	return 0;
@@ -267,43 +291,57 @@ int pegaDadosArquivo(FILE *arquivo,MatrizDinamica *caminho){
     char texto[50];
     char *temp;
     int cont = 0;
-	while ((l==caminho->linhas && c==caminho->linhas) &&  !(feof(arquivo)) && aux && posicao_valida_matriz(*caminho,l,c)!=ERRO_COORDENADA_INVALIDA){
+	while ((l!=caminho->linhas && c!=caminho->colunas) &&  !(feof(arquivo)) && aux && posicao_valida_matriz(*caminho,l,c)!=ERRO_COORDENADA_INVALIDA){
         fgets(texto,20,arquivo);
+
         // printf("Texto : %s\n", texto);
         temp = strtok(texto, " ");
         cont = 0;
         c = 0;
     	aux = insert(caminho,l,c,temp);
-
+		// c++;
         while((temp = strtok(0, " ")) != 0 && aux){
         	c++;
         	aux = insert(caminho,l,c,temp);
         }
         l++;
 	}
+	c++;
 
-	// mostra_matriz(*caminho,mostra_c);
-
-	return aux;
+	mostra_matriz(*caminho,mostra_c);
+	// return aux;
+	return aux? (l==caminho->linhas && c==caminho->colunas) : 0;
 }
 
-int pegaPosicaoIniFim(FILE *arquivo,Celula *ini,Celula *fim,MatrizDinamica caminho){
+int pegaPosicaoIniFim(FILE *arquivo,Celula *c,MatrizDinamica caminho){
 	int aux = 1;
 	char* temp;
 	char texto[20];
-	while ( !(feof(arquivo)) && aux){
+	if ( !(feof(arquivo)) && aux){
 		fgets(texto,20,arquivo);
+		
+		printf("teste:%s\n",texto);
 
         temp = strtok(texto, " ");
 
 		aux = validaNumero(temp);
 		
+		if(!aux || (aux && (atoi(temp)<0 || atoi(temp)>caminho.linhas))){
+			return 0;
+		}else 
+			c->linha = atoi(temp)-1;
+
 		temp = strtok(0, " ");
-		
-		if(!aux || (aux && atoi(temp)<0)){
-			
-		}
+
+		aux = validaNumero(temp);
+
+		if(!aux || (aux && (atoi(temp)<0 || atoi(temp)>caminho.colunas) )){
+			return 0;
+		}else 
+			c->coluna = atoi(temp)-1;
 	}
+
+	return aux;
 }
 
 int insert(MatrizDinamica *caminho,int l,int c,char *temp){
@@ -368,7 +406,7 @@ void moldaCaminho(MatrizDinamica *caminho, Celula fim, MatrizDinamica *caminhoFi
 	char *a = malloc(sizeof(char)*5);
 	
 	strcpy(a," F ");
-	printf("l:%d || c:%d\n",l,c );
+	// printf("l:%d || c:%d\n",l,c );
 
 	modifica_matriz(caminhoFinal,l,c,a);
 
@@ -422,7 +460,7 @@ void moldaCaminho(MatrizDinamica *caminho, Celula fim, MatrizDinamica *caminhoFi
 		// printf("%d;%d\n",d_e,c_b);
 	}
 
-	printf("l:%d || c:%d\n",l,c );
+	// printf("l:%d || c:%d\n",l,c );
 	strcpy(a," I ");
 	modifica_matriz(caminhoFinal,l,c,a);
 
@@ -451,7 +489,7 @@ void getPosicao(Celula *a,int l,int c){
 		gets(auxChar);
 		aux = validaNumero(auxChar);
 		if(aux){
-			a->linha= atoi(auxChar);
+			a->linha= atoi(auxChar)-1;
 		}
 	} while (!aux || a->linha<0 || a->linha>l);
 
@@ -460,7 +498,7 @@ void getPosicao(Celula *a,int l,int c){
 		gets(auxChar);
 		aux = validaNumero(auxChar);
 		if(aux){
-			a->coluna= atoi(auxChar);
+			a->coluna= atoi(auxChar)-1;
 		}
 	} while (!aux || a->coluna<0 || a->coluna>c);
 }
