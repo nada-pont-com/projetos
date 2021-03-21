@@ -1,0 +1,26 @@
+1 - Quero saber a lotação de leitos por setor
+2 - Não
+3 - Sim
+4 - Não
+5 - Não
+6 - Quero saber quais são as lotações dos leitos, para evitar
+colocar mais pessoas do que leitos vagos em um setor;
+
+2 - Sim, quer evitar o problema de possuir mais pessoas internadas que leitos por setor;
+
+7 - Não saber a quantidade de leitos ocupados por sertor
+8 - Mais pessoas internadas do que leitos vagos por setor
+9 - Controladas
+10b - Numero de leitos, Setores, e numero de internados por setor
+11 - 1. Numero de leitos ocupados p/ setor -> Todos os Leitos menos os Pacientes internados
+     2. Numero de internados por sertor -> Chegada de paciente
+Respostas desejadas: 
+	1. O numero de leitos Ocupados Por Setor
+
+12 - 1. controle
+13 - Sim
+
+14 - 
+Chegada de paciente -> Numeros de pacientes internado e Numero de Leitos Vagos
+
+15 - Não

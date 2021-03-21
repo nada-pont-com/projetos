@@ -1,0 +1,177 @@
+package Json;
+
+public class Conversor {
+
+    private static Conversor _this;
+    private Conversor(){ }
+
+    public static Array_js getJson(String json){
+        if(_this==null) _this = new Conversor();
+        return _this.converter(json);
+    }
+
+    private Array_js converter(String json){
+
+        /*String a = "{ \"login\": { \"user-id\": \"colocar aqui o nome do usuario\"," +
+                "\"user-id-2\": \"colocar aqui\" },\"msg\": \"teste\" }";*/
+        char[] b = json.toCharArray();
+        Array_js list = new Array_js();
+        list.setObj();
+        for (int i = 0;i<b.length;i++) {
+            if(b[i]=='{'){
+                validaChave(b,i+1,list);
+                break;
+            }
+            if(b[i]=='['){
+                validaList(b,i+1,list);
+                break;
+            }
+        }
+        return list;
+    }
+
+    private int validaChave(char[] string,int ini,Array_js list){
+        Array_js aux = new Array_js();
+
+        String key_s = "",valeu_s = "";
+        boolean key = true,text = false,valeu = false;
+        int chaves_abertas = 1;
+        int i,j = 0;
+        for (i = ini;i<string.length;i++) {
+            if(j>i) continue;
+            if(string[i]=='{'){
+                aux.setKey(key_s);
+                valeu_s = "";
+                key_s = "";
+                key = true;
+                valeu = false;
+                list.setValue(aux);
+                aux = new Array_js();
+                j = validaChave(string,i+1,list.getLastValue());
+                chaves_abertas++;
+                continue;
+            }
+            if(string[i]=='['){
+                aux.setKey(key_s);
+                valeu_s = "";
+                key_s = "";
+                list.setValue(aux);
+                j = validaList(string,i+1,list.getLastValue());
+                chaves_abertas++;
+                continue;
+            }
+
+            if(string[i]=='}' || string[i]==']'){
+                chaves_abertas--;
+            }
+
+            if(chaves_abertas==0) break;
+
+            if(string[i]==',' && !text && valeu){
+                aux.setValue(valeu_s);
+                aux.setKey(key_s);
+                valeu_s = "";
+                key_s = "";
+                key = true;
+                valeu = false;
+                list.setValue(aux);
+                aux = new Array_js();
+                continue;
+            }
+
+            if(string[i]=='"'){
+                text = !text;
+                continue;
+            }
+
+            if(key && text){
+                key_s += string[i];
+                continue;
+            }
+            if(string[i]==':' && !text){
+                key = false;
+                valeu = true;
+                continue;
+            }
+            if(valeu && text){
+                valeu_s += string[i];
+                //continue;
+            }
+
+        }
+        if(!valeu_s.equals("")){
+            aux.setValue(valeu_s);
+            aux.setKey(key_s);
+            list.setValue(aux);
+        }
+        return i;
+    }
+
+    private int validaList(char[] string,int ini,Array_js list){
+        Array_js aux = new Array_js();
+        aux.setList();
+        //list = new ArrayList<>();
+        String valeu_s = "";
+        boolean text = false,valeu = true;
+        int chaves_abertas = 1;
+        int i,j = 0,cont = 0;
+        String h = "{ \"login\": { \"user-id\": \"colocar aqui o nome do usuario\", " +
+                "\"jose\": [{\"tst\" : \"teste\"}] } }";
+
+        for (i = ini;i<string.length;i++) {
+            if(j>i) continue;
+
+            if(string[i]=='['){
+                aux.setKey(cont+"");
+                cont++;
+                valeu_s = "";
+                list.setValue(aux);
+                j = validaList(string,i+1,list.getLastValue());
+                chaves_abertas++;
+                continue;
+            }
+
+            if(string[i]=='{'){
+                aux.setKey(cont+"");
+                cont++;
+                valeu_s = "";
+                aux.setObj();
+                list.setValue(aux);
+                j = validaChave(string,i+1,list.getLastValue());
+                chaves_abertas++;
+                continue;
+            }
+
+            if(string[i]==']' || string[i]=='}'){
+                chaves_abertas--;
+            }
+            if(chaves_abertas==0) break;
+
+            if(string[i]==','){
+                aux.setValue(valeu_s);
+                aux.setKey(cont+"");
+                cont++;
+                valeu_s = "";
+                list.setValue(aux);
+                aux = new Array_js();
+                continue;
+            }
+            if(string[i]=='"'){
+                text = !text;
+                continue;
+            }
+
+            if(valeu && text){
+                valeu_s += string[i];
+                //continue;
+            }
+
+        }
+        if(!valeu_s.equals("")){
+            aux.setValue(valeu_s);
+            aux.setKey(cont+"");
+            list.setValue(aux);
+        }
+        return i;
+    }
+}
