@@ -13,7 +13,7 @@ public class Conexao extends Thread{
     private PrintStream printer;
     private Socket socket;
     private String mensagem;
-    private ArrayList<ListenerConexao> listeners = new ArrayList();
+    private ArrayList<ListenerConexao> listeners = new ArrayList<>();
 
     public Conexao(String mensagem){
         super();

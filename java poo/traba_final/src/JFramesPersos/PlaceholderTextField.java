@@ -26,7 +26,7 @@ public class PlaceholderTextField extends JTextField {
             return;
         }
 
-        final Graphics2D g = (Graphics2D) pG;
+        Graphics2D g = (Graphics2D) pG;
         g.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);

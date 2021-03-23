@@ -11,9 +11,6 @@ public class Conversor {
     }
 
     private Array_js converter(String json){
-
-        /*String a = "{ \"login\": { \"user-id\": \"colocar aqui o nome do usuario\"," +
-                "\"user-id-2\": \"colocar aqui\" },\"msg\": \"teste\" }";*/
         char[] b = json.toCharArray();
         Array_js list = new Array_js();
         list.setObj();
@@ -55,7 +52,9 @@ public class Conversor {
                 aux.setKey(key_s);
                 valeu_s = "";
                 key_s = "";
+                aux.setList();
                 list.setValue(aux);
+                aux = new Array_js();
                 j = validaList(string,i+1,list.getLastValue());
                 chaves_abertas++;
                 continue;
@@ -109,14 +108,10 @@ public class Conversor {
 
     private int validaList(char[] string,int ini,Array_js list){
         Array_js aux = new Array_js();
-        aux.setList();
-        //list = new ArrayList<>();
         String valeu_s = "";
-        boolean text = false,valeu = true;
+        boolean text = false,value = false;
         int chaves_abertas = 1;
         int i,j = 0,cont = 0;
-        String h = "{ \"login\": { \"user-id\": \"colocar aqui o nome do usuario\", " +
-                "\"jose\": [{\"tst\" : \"teste\"}] } }";
 
         for (i = ini;i<string.length;i++) {
             if(j>i) continue;
@@ -124,8 +119,11 @@ public class Conversor {
             if(string[i]=='['){
                 aux.setKey(cont+"");
                 cont++;
+                value = true;
                 valeu_s = "";
+                aux.setList();
                 list.setValue(aux);
+                aux = new Array_js();
                 j = validaList(string,i+1,list.getLastValue());
                 chaves_abertas++;
                 continue;
@@ -133,10 +131,11 @@ public class Conversor {
 
             if(string[i]=='{'){
                 aux.setKey(cont+"");
+                value = true;
                 cont++;
                 valeu_s = "";
-                aux.setObj();
                 list.setValue(aux);
+                aux = new Array_js();
                 j = validaChave(string,i+1,list.getLastValue());
                 chaves_abertas++;
                 continue;
@@ -147,7 +146,11 @@ public class Conversor {
             }
             if(chaves_abertas==0) break;
 
-            if(string[i]==','){
+            if(string[i]==',' && !text && value){
+                value = false;
+                continue;
+            }
+            if(string[i]==',' && !text && !value){
                 aux.setValue(valeu_s);
                 aux.setKey(cont+"");
                 cont++;
@@ -156,12 +159,13 @@ public class Conversor {
                 aux = new Array_js();
                 continue;
             }
+
             if(string[i]=='"'){
                 text = !text;
                 continue;
             }
 
-            if(valeu && text){
+            if(text){
                 valeu_s += string[i];
                 //continue;
             }

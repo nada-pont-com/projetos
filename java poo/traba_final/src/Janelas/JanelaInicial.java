@@ -32,14 +32,18 @@ public class JanelaInicial extends JFrame{
         image = new JLabel(img);
         msgAlert = new JLabel("",JLabel.CENTER);
         msgAlert.setForeground(Color.red);
+
         login.addActionListener(e -> {
             String mensagem = "{ \"login\": { \"user-id\": \""+user.getText()+"\" } }";
             Conexao conexao = new Conexao(mensagem);
             conexao.addListener(new ListenerConexao() {
                 @Override
                 public void success(String value) {
-                    if (validaLogin(Conversor.getJson(value))) {
+                    Array_js aux = Conversor.getJson(value);
+                    if (validaLogin(aux)) {
                         _this.setVisible(false);
+                        JanelaPrincipal.getJanela(aux.getValuesAsKey("okay").getValuesAsKey("user-id").getValue()).setVisible(true);
+                        msgAlert.setText("");
                     } else{
                         msgAlert.setText("Login invalido");
                     }
@@ -89,7 +93,6 @@ public class JanelaInicial extends JFrame{
     }
 
     private boolean validaLogin(Array_js json){
-        System.out.println(json.toString());
         return (json.getKey("okay")!=null);
     }
 }
