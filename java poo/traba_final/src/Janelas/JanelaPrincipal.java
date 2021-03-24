@@ -12,13 +12,14 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.Vector;
 
 public class JanelaPrincipal extends JFrame {
 
     private static JanelaPrincipal _this;
     JLabel mensagem_corpo = new JLabel();
+    JLabel assunto = new JLabel();
+    JLabel remetente = new JLabel();
     JTree pastas;
     JList<Mensagem> listMensagens = new JList<Mensagem>();
     String user_id;
@@ -30,6 +31,7 @@ public class JanelaPrincipal extends JFrame {
     }
 
     private JanelaPrincipal(){
+
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -49,16 +51,23 @@ public class JanelaPrincipal extends JFrame {
                                 .addGap(0, 0, 0)
                                 .addComponent(mensagems, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(0, 0, 0)
-                                .addComponent(mensagem, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(mensagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(pastas, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(mensagems, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(mensagem, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(mensagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
         );
 
         pack();
+        setSize(1280,700);
+        setLocationRelativeTo(null);
     }
 
     private JPanel pastas(){
@@ -81,14 +90,22 @@ public class JanelaPrincipal extends JFrame {
                         public void success(String value) {
                             String a =
             "{\"mensagens\": [" +
-                "{\"remetente\": \"nome do remetente\",\"assunto\": \"nononono\",\"texto\": \"nononononononono\"}," +
+                "{\"remetente\": \"nome do remetente\",\"assunto\": \"nononono\",\"texto\": \"teste 123\"}," +
+                    "{\"remetente\": \"nome do remetente\",\"assunto\": \"nononono\",\"texto\": \"teste 4\"}," +
+                    "{\"remetente\": \"nome do remetente\",\"assunto\": \"nononono\",\"texto\": \"teste 5\"}," +
+                    "{\"remetente\": \"nome do remetente\",\"assunto\": \"nononono\",\"texto\": \"teste 6\"}," +
                 "{\"remetente\": \"nome do outro remetente\",\"assunto\": \"abcabd\",\"texto\": \"adcadcadcadc\"}" +
             "]}";
                             Array_js aux = Conversor.getJson(a);
+                            System.out.println(aux);
                             aux = aux.getValuesAsKey("mensagens");
-                            //Mensagem[] mensagems = new Mensagem[aux.getKeys().size()];
-                            Vector<Mensagem> mensagems = new Vector<Mensagem>();
+                            aux.setValue(aux.getValuesAsKey("0"));
+
+                            System.out.println(aux);
+
+                            Vector<Mensagem> mensagems = new Vector<>();
                             for (String string : aux.getKeys()){
+                                System.out.println(aux.getValuesAsKey(string));
                                 mensagems.add(new Mensagem(aux.getValuesAsKey(string)));
                             }
                             updateLista(mensagems);
@@ -131,19 +148,13 @@ public class JanelaPrincipal extends JFrame {
         return pastas;
     }
 
-    private void updateLista(Vector<Mensagem> strings) {
-        listMensagens.removeAll();
-        listMensagens.setListData(strings);
-    }
-
     private JPanel mensagens(){
         JScrollPane scrollMensagens = new JScrollPane();
 
-        /*listMensagens.setModel(new AbstractListModel<String>() {
-            String[] strings = {};
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });*/
+        listMensagens.addListSelectionListener(e -> {
+            updateEmail(listMensagens.getSelectedValue());
+            System.out.println("Selecao no List foi: "+listMensagens.getSelectedValue());
+        });
 
         scrollMensagens.setViewportView(listMensagens);
 
@@ -174,20 +185,52 @@ public class JanelaPrincipal extends JFrame {
         mensagem.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
                 jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(mensagem_corpo, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
-                                .addContainerGap())
+                .addGroup(GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                        .addComponent(assunto, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(remetente, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(mensagem_corpo, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE))
+                    .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
                 jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(mensagem_corpo, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())
+                .addGroup(GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(assunto, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(remetente, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(mensagem_corpo, GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+                    .addContainerGap())
         );
+        mensagem.setBorder(BorderFactory.createBevelBorder(1));
+
+        mensagem_corpo.setVerticalAlignment(JLabel.TOP);
+        assunto.setBorder(BorderFactory.createBevelBorder(1));
+        mensagem_corpo.setBorder(BorderFactory.createBevelBorder(1));
+        remetente.setBorder(BorderFactory.createBevelBorder(1));
+
+        assunto.setVisible(false);
+        remetente.setVisible(false);
+        mensagem_corpo.setVisible(false);
 
         return mensagem;
+    }
+
+    private void updateLista(Vector<Mensagem> strings) {
+        listMensagens.removeAll();
+        listMensagens.setListData(strings);
+        assunto.setVisible(true);
+        remetente.setVisible(true);
+        mensagem_corpo.setVisible(true);
+    }
+
+    private void updateEmail(Mensagem mensagem){
+        mensagem_corpo.setText(mensagem.getMensagem());
+        assunto.setText(mensagem.getAssunto());
+        remetente.setText(mensagem.getRementente());
+
     }
 
     private void sair(){

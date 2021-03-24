@@ -10,16 +10,6 @@ public class Array_js extends Objeto{
 
     }
 
-    public Array_js(ArrayList<Array_js> array_js,String key){
-        super(array_js);
-        this.key = key;
-    }
-
-    public Array_js(String value,String key){
-        this.value = value;
-        this.key = key;
-    }
-
     public void setKey(String key) {
         this.key = key;
     }
@@ -36,10 +26,27 @@ public class Array_js extends Objeto{
         return value;
     }
 
+    protected Array_js clone(){
+        Array_js clone = new Array_js();
+
+        clone.setKey(this.getKey());
+        clone.setList(list);
+        clone.setListP(listP);
+
+        if(this.obj || listP || list){
+            for (Array_js array_js : this.getValues()){
+                clone.setValue(array_js.clone());
+            }
+        }else{
+            clone.setValue(this.getValue());
+        }
+        return clone;
+    }
+
     @Override
     public String toString() {
         String toString = "" +
-                        (key!=null ? "\"" + key + "\":" : "");
+                        (key!=null && !listP ? "\"" + key + "\":" : "");
 
         if(getLastValue()!=null){
 

@@ -42,6 +42,7 @@ public class Conversor {
                 key_s = "";
                 key = true;
                 valeu = false;
+                aux.setObj();
                 list.setValue(aux);
                 aux = new Array_js();
                 j = validaChave(string,i+1,list.getLastValue());
@@ -111,14 +112,13 @@ public class Conversor {
         String valeu_s = "";
         boolean text = false,value = false;
         int chaves_abertas = 1;
-        int i,j = 0,cont = 0;
+        int i,j = 0;
 
         for (i = ini;i<string.length;i++) {
             if(j>i) continue;
 
             if(string[i]=='['){
-                aux.setKey(cont+"");
-                cont++;
+
                 value = true;
                 valeu_s = "";
                 aux.setList();
@@ -130,11 +130,10 @@ public class Conversor {
             }
 
             if(string[i]=='{'){
-                aux.setKey(cont+"");
                 value = true;
-                cont++;
                 valeu_s = "";
                 list.setValue(aux);
+                aux.setObj();
                 aux = new Array_js();
                 j = validaChave(string,i+1,list.getLastValue());
                 chaves_abertas++;
@@ -152,8 +151,6 @@ public class Conversor {
             }
             if(string[i]==',' && !text && !value){
                 aux.setValue(valeu_s);
-                aux.setKey(cont+"");
-                cont++;
                 valeu_s = "";
                 list.setValue(aux);
                 aux = new Array_js();
@@ -167,13 +164,10 @@ public class Conversor {
 
             if(text){
                 valeu_s += string[i];
-                //continue;
             }
-
         }
         if(!valeu_s.equals("")){
             aux.setValue(valeu_s);
-            aux.setKey(cont+"");
             list.setValue(aux);
         }
         return i;

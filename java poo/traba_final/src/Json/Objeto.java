@@ -4,14 +4,11 @@ import java.util.ArrayList;
 
 public class Objeto {
     protected boolean list = false;
+    protected boolean listP = false;
     protected boolean obj = false;
     protected ArrayList<Array_js> values = new ArrayList<>();
 
     public Objeto(){ }
-
-    public Objeto(ArrayList<Array_js> array_js){
-        this.values = array_js;
-    }
 
     public void setObj() {
         this.obj = true;
@@ -21,7 +18,29 @@ public class Objeto {
         this.list = true;
     }
 
+    protected void setList(boolean list) {
+        this.list = list;
+    }
+
+    protected void setListP(boolean listP) {
+        this.listP = listP;
+    }
+
+    protected void setListP() {
+        this.listP = true;
+    }
+
     public void setValue(Array_js value) {
+        if(value==null){
+            return;
+        }
+        if(values==null){
+            values = new ArrayList<>();
+        }
+        if(list){
+            value.setKey((values.size())+"");
+            value.setListP();
+        }
         this.values.add(value);
     }
 
@@ -34,14 +53,8 @@ public class Objeto {
     public Array_js getValuesAsKey(String key){
         Array_js aux = null;
         for (Array_js array_js : values){
-            //System.out.println(array_js);
-
             if(array_js.getKey().equals(key)){
-                if(array_js.getValues().size()!=0){
-                    aux = new Array_js(array_js.getValues(),key);
-                }else{
-                    aux = new Array_js(array_js.getValue(),key);
-                }
+                aux = array_js.clone();
             }
         }
         return aux;
