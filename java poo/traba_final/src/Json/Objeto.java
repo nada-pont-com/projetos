@@ -2,16 +2,23 @@ package Json;
 
 import java.util.ArrayList;
 
-public class Objeto {
+public class Objeto extends JsonAbstract{
     protected boolean list = false;
     protected boolean listP = false;
     protected boolean obj = false;
-    protected ArrayList<Array_js> values = new ArrayList<>();
 
     public Objeto(){ }
 
     public void setObj() {
         this.obj = true;
+    }
+
+    protected void setObj(boolean obj) {
+        this.obj = obj;
+    }
+
+    public boolean isObj() {
+        return obj;
     }
 
     public void setList() {
@@ -34,25 +41,21 @@ public class Objeto {
         if(value==null){
             return;
         }
-        if(values==null){
-            values = new ArrayList<>();
+        if(json==null){
+            json = new ArrayList<>();
         }
         if(list){
-            value.setKey((values.size())+"");
+            value.setValue(value.clone());
+            value.setKey((json.size())+"");
             value.setListP();
         }
-        this.values.add(value);
+        setObj();
+        this.json.add(value);
     }
 
-    public Array_js getLastValue() {
-        if(values.size()!=0)
-            return values.get(values.size()-1);
-        return null;
-    }
-
-    public Array_js getValuesAsKey(String key){
+    public Array_js getValuesAsKey(String key) throws NullPointerException{
         Array_js aux = null;
-        for (Array_js array_js : values){
+        for (Array_js array_js : json){
             if(array_js.getKey().equals(key)){
                 aux = array_js.clone();
             }
@@ -60,27 +63,8 @@ public class Objeto {
         return aux;
     }
 
-    public String getKey(String key){
-        String retorno = null;
-        for (Array_js array_js : values){
-            if(array_js.getKey().equals(key)) {
-                retorno = key;
-                break;
-            }
-        }
-        System.out.println(retorno);
-        return retorno;
-    }
-
-    public ArrayList<String> getKeys(){
-        ArrayList<String> retorno = new ArrayList<>();
-        for (Array_js array_js : values){
-            retorno.add(array_js.getKey());
-        }
-        return retorno;
-    }
-
     public ArrayList<Array_js> getValues() {
-        return values;
+        return json;
     }
+
 }

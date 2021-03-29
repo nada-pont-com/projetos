@@ -1,74 +1,107 @@
 package Conexao;
 
-import Interfaces.ListenerConexao;
+import Json.Array_js;
+import Json.Conversor;
+import Json.Json;
+import Mensagem.Mensagem;
+import File.Historico;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.Vector;
 
-public class Conexao extends Thread{
+public class Conexao{
     private PrintStream printer;
     private Socket socket;
-    private String mensagem;
-    private ArrayList<ListenerConexao> listeners = new ArrayList<>();
 
-    public Conexao(String mensagem){
-        super();
-        this.mensagem = mensagem;
+    private static Conexao _this = null;
+
+    public static Conexao getInstance(){
+        if(_this==null) _this = new Conexao();
+        return _this;
     }
 
-    @Override
-    public void run() {
+    private Conexao(){}
+
+    public String login(String user){
+        String mensagem = "{ \"login\": { \"user-id\": \""+user+"\" } }";
+        //conectar(mensagem);
+        return "{\"okay\": {\"user-id\":\"jose\"}}";
+    }
+
+    public boolean getMensagens(String user_id){
+        String mensagem = ("{\"get\":{\"user-id\": \""+user_id+"\"}}");
+        boolean mensagems = false;
+        //mensagem = conectar(mensagem);
+
+        if(mensagem!=null){
+            mensagems = true;
+            mensagem = "{\"mensagens\": []}";
+            Json mensagemsJson = Conversor.getJson(mensagem);
+
+            Historico.getInstance().salvarMensagensRecebidas(mensagemsJson);
+        }
+        return mensagems;
+    }
+
+
+    private String conectar(String mensagem){
+        String resposta = null;
         try {
-            socket = new Socket("25.81.21.225",7070);
-            enviarMansagem(mensagem);
-            lerDoServidor();
-            excutaListeners();
+            //socket = new Socket("25.81.21.225",80);
+            socket = new Socket("catolicasc-bigdata-valmor123.mybluemix.net",80);
+
+            //socket = new Socket("viacep.com.br",80);
+            enviarMensagem(mensagem);
+            resposta = lerDoServidor();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
-            falhaConexao();
         }
+        return resposta;
     }
 
-    private void enviarMansagem(String mensagem) throws IOException {
-        //mensagem = "{ \"login\": { \"user-id\": \"colocar aqui o nome do usuario\" } }";
+    private void enviarMensagem(String mensagem) throws IOException {
+        mensagem = "{\"login\"={\"user-id\":\"user\"}}";
+        mensagem = mensagem.replace(" ","%20");
         PrintStream printer = new PrintStream(socket.getOutputStream());
-        printer.println(mensagem);
+
+        printer.println("GET /mensagem?valor="+mensagem+" HTTP/1.1");
+        printer.println("Accept: */*");
+        printer.println("Host: catolicasc-bigdata-valmor123.mybluemix.net");
+        printer.println("Connection: Close");
         printer.println();
     }
 
-    private void lerDoServidor() throws IOException {
+    private String lerDoServidor() throws IOException {
         String mensagem = "";
         if(socket.isConnected()) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String msg = reader.readLine();
-            while (!msg.equals("")) {
+            System.out.println(msg);
+            while (msg!=null) {
+                System.out.println(msg);
                 mensagem += msg;
                 msg = reader.readLine();
             }
             reader.close();
         }
-        this.mensagem = mensagem;
-    }
-
-    private void falhaConexao(){
-        String mensagem = "{ \"falha\": { \"message\":\"Falha ao conectar no servidor\"} }";
-        for (ListenerConexao listenerConexao :listeners){
-            listenerConexao.error(mensagem);
+        /*BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        String line;
+        StringBuilder response = new StringBuilder();
+        boolean headerDone = false;
+        Map<String, String> responseMap = new HashMap<>();
+        System.out.println("Fetching response. Please wait...");
+        while ((line = bufferedReader.readLine()) != null) {
+            response.append(line + "\n");
+            if (line.isEmpty() && !headerDone) {
+                responseMap.put("header", response.toString());
+                headerDone = true;
+                response = new StringBuilder();
+            }
         }
-    }
-
-    private void excutaListeners(){
-        for (ListenerConexao listenerConexao :listeners){
-            listenerConexao.success(mensagem);
-        }
-    }
-
-    public void addListener(ListenerConexao listenerConexao) {
-        listeners.add(listenerConexao);
+        responseMap.put("content", response.toString());
+        System.out.println(response.toString());*/
+        return mensagem;
     }
 }

@@ -5,13 +5,13 @@ public class Conversor {
     private static Conversor _this;
     private Conversor(){ }
 
-    public static Array_js getJson(String json){
+    public static Json getJson(String json){
         if(_this==null) _this = new Conversor();
         return _this.converter(json);
     }
 
-    private Array_js converter(String json){
-        char[] b = json.toCharArray();
+    private Json converter(String jsonString){
+        char[] b = jsonString.toCharArray();
         Array_js list = new Array_js();
         list.setObj();
         for (int i = 0;i<b.length;i++) {
@@ -24,7 +24,12 @@ public class Conversor {
                 break;
             }
         }
-        return list;
+
+        Json json = new Json();
+        for(String key : list.getKeys()){
+            json.setArray_js(list.getValuesAsKey(key));
+        }
+        return json;
     }
 
     private int validaChave(char[] string,int ini,Array_js list){

@@ -6,15 +6,17 @@ public class Mensagem {
     private String mensagem;
     private String assunto;
     private String rementente;
+    private String destinatario;
 
-    public Mensagem(){
-
-    }
+    public Mensagem(){}
 
     public Mensagem(Array_js mensagem){
-        this.mensagem = mensagem.getValuesAsKey("texto").getValue();
-        this.assunto = mensagem.getValuesAsKey("assunto").getValue();
-        this.rementente = mensagem.getValuesAsKey("remetente").getValue();
+        Array_js aux = mensagem.getValuesAsKey("texto");
+        if(aux!=null){
+            this.mensagem = aux.getValue();
+            this.assunto = mensagem.getValuesAsKey("assunto").getValue();
+            this.rementente = mensagem.getValuesAsKey("remetente").getValue();
+        }
     }
 
     public String getAssunto() {
@@ -39,6 +41,14 @@ public class Mensagem {
 
     public void setRementente(String rementente) {
         this.rementente = rementente;
+    }
+
+    public String getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
     }
 
     @Override

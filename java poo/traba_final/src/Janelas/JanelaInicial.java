@@ -1,10 +1,10 @@
 package Janelas;
 
 import Conexao.Conexao;
-import Interfaces.ListenerConexao;
 import JFramesPersos.PlaceholderTextField;
-import Json.Array_js;
 import Json.Conversor;
+import Json.Json;
+import Usuario.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,27 +34,21 @@ public class JanelaInicial extends JFrame{
         msgAlert.setForeground(Color.red);
 
         login.addActionListener(e -> {
-            String mensagem = "{ \"login\": { \"user-id\": \""+user.getText()+"\" } }";
-            Conexao conexao = new Conexao(mensagem);
-            conexao.addListener(new ListenerConexao() {
-                @Override
-                public void success(String value) {
-                    Array_js aux = Conversor.getJson(value);
-                    if (validaLogin(aux)) {
-                        _this.setVisible(false);
-                        JanelaPrincipal.getJanela(aux.getValuesAsKey("okay").getValuesAsKey("user-id").getValue()).setVisible(true);
-                        msgAlert.setText("");
-                    } else{
-                        msgAlert.setText("Login invalido");
-                    }
-                }
 
-                @Override
-                public void error(String value) {
-                    msgAlert.setText(Conversor.getJson(value).getValuesAsKey("falha").getValuesAsKey("message").getValue());
-                }
-            });
-            conexao.start();
+            Conexao conexao = Conexao.getInstance();
+            String value = conexao.login(user.getText());
+            Json json = Conversor.getJson(value);
+
+            if (validaLogin(json)) {
+                _this.setVisible(false);
+                Usuario.getIntance().setUserId(user.getText());
+                JanelaPrincipal.getJanela().setVisible(true);
+                msgAlert.setText("");
+            } else{
+                msgAlert.setText("Login invalido");
+            }
+
+
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -92,7 +86,7 @@ public class JanelaInicial extends JFrame{
         setVisible(true);
     }
 
-    private boolean validaLogin(Array_js json){
-        return (json.getKey("okay")!=null);
+    private boolean validaLogin(Json json){
+        return (json.isKey("okay"));
     }
 }

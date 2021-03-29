@@ -5,8 +5,9 @@ import java.io.*;
 public class GerenciadorArquivos {
 
     private File file;
+
     public GerenciadorArquivos(String nome) {
-        file = new File(nome+".txt");
+        file = new File(nome+".json");
     }
 
     public void escreverNoArquivo(String texto) throws IOException {
@@ -24,12 +25,14 @@ public class GerenciadorArquivos {
         BufferedReader br = new BufferedReader(new FileReader(file));
         String resposta = "";
         String temp = br.readLine();
-        if(temp != null) {
+        while(temp != null) {
             resposta+= temp;
             temp = br.readLine();
         }
         br.close();
         return resposta;
     }
+
+
 
 }
