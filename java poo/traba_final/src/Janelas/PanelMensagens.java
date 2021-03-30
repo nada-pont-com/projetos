@@ -45,6 +45,7 @@ public class PanelMensagens extends JPanel{
 
     public void updateLista(Vector<Mensagem> strings) {
         listMensagens.removeAll();
+        System.out.println(strings);
         listMensagens.setListData(strings);
         /*assunto.setVisible(true);
         remetente.setVisible(true);

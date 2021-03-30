@@ -5,6 +5,7 @@ import Json.Conversor;
 import Json.Json;
 import Mensagem.Mensagem;
 
+import javax.print.attribute.standard.Sides;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -31,29 +32,35 @@ public class Historico {
     }
 
     private boolean salvar(GerenciadorArquivos file,Json novas){
-        System.out.println(novas);
+        //System.out.println(novas);
         if(validaArquivo(file)){
             try {
                 if(novas.isKey("mensagens")){
-                    Json json = Conversor.getJson(file.lerDoArquivo());
+                    String teste = file.lerDoArquivo();
+                    Json json = Conversor.getJson(teste);
+
                     Array_js mensagens = json.getArray_js("mensagens");
                     Array_js novasMensagens = novas.getArray_js("mensagens");
 
-                    System.out.println(mensagens);
-                    System.out.println(novas.getKeys());
+                    /*System.out.println(mensagens);
+                    System.out.println(novas.getKeys().toString());*/
 
                     //aux = mensagens.getValuesAsKey("mensagens");
                     // novas =  novas.getValuesAsKey("mensagens");
 
                     for (String key : novas.getKeys()){
+                        /*System.out.println("ola mundo 129");*/
                         mensagens.setValue(novasMensagens.getValuesAsKey(key));
                     }
+                    /*System.out.println("-----------------------------------");
+                    System.out.println(mensagens);
+                    System.out.println("-----------------------------------");*/
 
                     json.updateValueAsKey("mensagens",mensagens);
-                    file.escreverNoArquivo(json.toString());
+                    //file.escreverNoArquivo(json.toString());
 
-                    System.out.println(mensagens);
-                    System.out.println(json.toString());
+                    /*System.out.println(mensagens);
+                    System.out.println(json.toString());*/
                 }
 
             } catch (IOException e) {
@@ -96,13 +103,16 @@ public class Historico {
         Vector<Mensagem> mensagems = new Vector<>();
         if(validaArquivo(gerenciadorArquivos)){
             try {
-                Json json = Conversor.getJson(gerenciadorArquivos.lerDoArquivo());
+                String test = gerenciadorArquivos.lerDoArquivo();
+                Json json = Conversor.getJson(test);
 
                 mensagensJson = json.getArray_js("mensagens");
                 //mensagensJson = mensagensJson.getValuesAsKey("mensagens");
 
                 if(mensagensJson!=null){
+                    /*System.out.println(mensagensJson);*/
                     for (String string : mensagensJson.getKeys()){
+
                         mensagems.add(new Mensagem(mensagensJson.getValuesAsKey(string)));
                     }
                 }

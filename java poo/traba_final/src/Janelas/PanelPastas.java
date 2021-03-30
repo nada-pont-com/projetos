@@ -1,14 +1,8 @@
 package Janelas;
 
-import Conexao.Conexao;
-import Mensagem.Mensagem;
-import Usuario.Usuario;
-
 import javax.swing.*;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
-import java.util.Vector;
 
 public class PanelPastas extends JPanel{
     private JTree pastas;

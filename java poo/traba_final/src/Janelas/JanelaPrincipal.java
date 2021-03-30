@@ -23,7 +23,6 @@ public class JanelaPrincipal extends JFrame {
 
     public static JanelaPrincipal getJanela() {
         if (_this == null) _this = new JanelaPrincipal();
-
         return _this;
     }
 
@@ -32,7 +31,11 @@ public class JanelaPrincipal extends JFrame {
         escrever.setText("Escrever");
 
         escrever.addActionListener(e -> {
+            if(enviar.isVisible()){
+                enviar.salvarRascunho();
+            }
             enviar.setVisible(true);
+            enviar.setRemetente();
             mensagem.setVisible(false);
         });
 
@@ -90,26 +93,32 @@ public class JanelaPrincipal extends JFrame {
 
     private void addUpdateEmail() {
         mensagens.addListener(e -> {
-            mensagem.updateEmail((Mensagem) ( ((JList) e.getSource()) .getSelectedValue()) );
-
+            Object aux = ((JList) e.getSource()) .getSelectedValue();
+            if(aux!=null){
+                mensagem.updateEmail((Mensagem) (aux));
+            }
             System.out.println("Selecao no List foi: " + ((JList) e.getSource()).getSelectedValue());
         });
     }
 
-    private String tempPasta = "";
+    private String tempPasta = "null";
     private void addUpdateMensagens() {
         pastas.addListener(e -> {
-            enviar.salvarRascunho();
+            if(!e.getPath().toString().contains(tempPasta)){
+                Object[] aux =  e.getPath().getPath();
+                tempPasta = aux[aux.length-1].toString();
+                if(!enviar.isVisible()){
+                    enviar.salvarRascunho();
+                    //Historico.getInstance().salvarRascunhos(new Json());
+                }
+                enviar.setVisible(false);
+                mensagem.setVisible(true);
+                mensagem.clear();
+            }
+
             if (e.getPath().toString().contains("Inbox")) {
 
-                if(!e.getPath().toString().contains(tempPasta)){
-                    if(!enviar.isVisible()){
-                        Historico.getInstance().salvarRascunhos(new Json());
-                    }
-                    enviar.setVisible(false);
-                    mensagem.setVisible(true);
-                    mensagem.clear();
-                }
+
                 System.out.println("Selecao foi: " + e.getPath());
                 Conexao conexao = Conexao.getInstance();
                 if (conexao.getMensagens(Usuario.getIntance().getUserId())) {

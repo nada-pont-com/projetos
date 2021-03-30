@@ -1,14 +1,12 @@
 package Conexao;
 
-import Json.Array_js;
 import Json.Conversor;
 import Json.Json;
-import Mensagem.Mensagem;
 import File.Historico;
+import Mensagem.Mensagem;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Vector;
 
 public class Conexao{
     private PrintStream printer;
@@ -32,7 +30,7 @@ public class Conexao{
     public boolean getMensagens(String user_id){
         String mensagem = ("{\"get\":{\"user-id\": \""+user_id+"\"}}");
         boolean mensagems = false;
-        //mensagem = conectar(mensagem);
+        mensagem = conectar(mensagem);
 
         if(mensagem!=null){
             mensagems = true;
@@ -44,12 +42,31 @@ public class Conexao{
         return mensagems;
     }
 
+    public boolean enviarEmail(Mensagem mensagem){
+        return enviarEmail(mensagem.toJson("send",true));
+    }
+
+    public boolean enviarEmail(Json json){
+        String aux = "{\n" +
+            " \"send\": {\n" +
+            " \"remetente\": \"nome do remetente\",\n" +
+            " \"destinatario\": \"nome do destinatario\",\n" +
+            " \"assunto\": \"nononono\",\n" +
+            " \"texto\": \"nononononononono\"\n" +
+        " }";
+        aux = conectar(json.toString());
+
+        Json info = Conversor.getJson(aux);
+
+        return info.isKey("okay");
+    }
+
 
     private String conectar(String mensagem){
         String resposta = null;
         try {
-            //socket = new Socket("25.81.21.225",80);
-            socket = new Socket("catolicasc-bigdata-valmor123.mybluemix.net",80);
+            socket = new Socket("25.81.21.225",80);
+            //socket = new Socket("catolicasc-bigdata-valmor123.mybluemix.net",80);
 
             //socket = new Socket("viacep.com.br",80);
             enviarMensagem(mensagem);
@@ -62,14 +79,17 @@ public class Conexao{
     }
 
     private void enviarMensagem(String mensagem) throws IOException {
-        mensagem = "{\"login\"={\"user-id\":\"user\"}}";
-        mensagem = mensagem.replace(" ","%20");
+        //mensagem = "{\"login\"={\"user-id\":\"user\"}}";
+        //mensagem = mensagem.replace(" ","%20");
+
         PrintStream printer = new PrintStream(socket.getOutputStream());
 
-        printer.println("GET /mensagem?valor="+mensagem+" HTTP/1.1");
-        printer.println("Accept: */*");
-        printer.println("Host: catolicasc-bigdata-valmor123.mybluemix.net");
-        printer.println("Connection: Close");
+        //printer.println("GET /mensagem?valor="+mensagem+" HTTP/1.1");
+        //printer.println("Accept: */*");
+        /*printer.println("Host: catolicasc-bigdata-valmor123.mybluemix.net");
+        printer.println("Connection: Close");*/
+
+        printer.println(mensagem);
         printer.println();
     }
 

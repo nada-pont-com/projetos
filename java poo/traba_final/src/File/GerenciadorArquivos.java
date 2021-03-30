@@ -30,6 +30,7 @@ public class GerenciadorArquivos {
             temp = br.readLine();
         }
         br.close();
+        //System.out.println(resposta);
         return resposta;
     }
 
