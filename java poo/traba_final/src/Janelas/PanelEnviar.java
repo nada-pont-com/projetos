@@ -1,15 +1,17 @@
 package Janelas;
 
+import Conexao.Conexao;
+import File.Historico;
 import JFramesPersos.PlaceholderTextField;
 import Json.Array_js;
 import Json.Json;
+import Mensagem.Mensagem;
 import Usuario.Usuario;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 
-public class PanelEnviar extends JPanel {
+public class PanelEnviar extends PanelBase{
 
     private JButton enviar;
     private JButton cancelar;
@@ -39,7 +41,7 @@ public class PanelEnviar extends JPanel {
 
         assunto.setPlaceholder("Assunto");
         destinatario.setPlaceholder("Destinatario");
-
+        addActionEnviar();
         jScrollPane.setViewportView(conteudo);
         remetente.setBorder(BorderFactory.createBevelBorder(1));
         GroupLayout layout = new GroupLayout(this);
@@ -85,23 +87,45 @@ public class PanelEnviar extends JPanel {
     }
 
     public void salvarRascunho(){
-        Json rascunho = new Json();
+        Json rascunho;
+
+        Mensagem mensagem = new Mensagem();
+
+        mensagem.setAssunto(assunto.getText());
+        mensagem.setMensagem(conteudo.getText());
+        mensagem.setDestinatario(destinatario.getText());
+        mensagem.setRementente(remetente.getText());
+
+        rascunho = mensagem.toJson("mensagens",true);
+        Historico.getInstance().salvarRascunhos(rascunho);
         System.out.println(rascunho);
-        Array_js aux = new Array_js("mensagens","");
-        aux.setList();
+    }
 
-        aux.setValue(new Array_js("texto",conteudo.getText()));
-        aux.setValue(new Array_js("assunto",assunto.getText()));
-        aux.setValue(new Array_js("remetente",remetente.getText()));
-        aux.setValue(new Array_js("destinatario",destinatario.getText()));
+    private void addActionEnviar(){
+        enviar.addActionListener(e ->{
+            Mensagem mensagem = new Mensagem();
 
-        rascunho.setArray_js(aux);
-        System.out.println(rascunho);
+            mensagem.setAssunto(assunto.getText());
+            mensagem.setMensagem(conteudo.getText());
+            mensagem.setDestinatario(destinatario.getText());
+            mensagem.setRementente(remetente.getText());
 
+            if(Conexao.getInstance().enviarEmail(mensagem)){
+                clear();
+                visible(false);
+            }
+        });
     }
 
     public void setRemetente() {
         System.out.println(Usuario.getIntance().getUserId());
         remetente.setText(Usuario.getIntance().getUserId());
+    }
+
+    public void clear() {
+        assunto.setText("");
+        conteudo.setText("");
+        destinatario.setText("");
+        remetente.setText("");
     }
 }

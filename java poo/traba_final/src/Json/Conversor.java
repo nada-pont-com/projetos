@@ -103,7 +103,7 @@ public class Conversor {
             }
 
         }
-        if(!valeu_s.equals("")){
+        if(!valeu_s.equals("") && !key_s.equals("")){
             aux.setValue(valeu_s);
             aux.setKey(key_s);
             list.setValue(aux);

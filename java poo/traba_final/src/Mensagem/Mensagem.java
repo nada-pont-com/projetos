@@ -63,14 +63,13 @@ public class Mensagem {
 
     public Json toJson(String key, boolean enviar){
         setEnviar(enviar);
-        return  toJson(key);
+        return toJson(key);
     }
 
     public Json toJson(String key){
         Json json = new Json();
 
         Array_js aux = new Array_js(key,"");
-        aux.setList();
 
         aux.setValue(new Array_js("texto",mensagem));
         aux.setValue(new Array_js("assunto",assunto));
@@ -80,6 +79,7 @@ public class Mensagem {
         }
 
         json.setArray_js(aux);
+        System.out.println(json);
 
         return json;
     }

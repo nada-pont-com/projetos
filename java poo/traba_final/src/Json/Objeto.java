@@ -51,7 +51,7 @@ public class Objeto extends JsonAbstract{
         }
 
         if(list){
-            if(value.getLastValue()!=null)
+            if(value.getLastValue()==null && value.getValue()!=null)
                 value.setValue(value.clone());
             value.setKey((json.size())+"");
             value.setListP();

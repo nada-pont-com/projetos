@@ -4,7 +4,7 @@ import Mensagem.Mensagem;
 
 import javax.swing.*;
 
-public class PanelMensagem extends JPanel{
+public class PanelMensagem extends PanelBase{
 
     private JLabel mensagem_corpo = new JLabel();
     private JLabel assunto = new JLabel();

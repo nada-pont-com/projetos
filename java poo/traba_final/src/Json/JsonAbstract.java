@@ -39,11 +39,15 @@ public abstract class JsonAbstract {
 
     public void updateValueAsKey(String key,Array_js value){
         if(value!=null){
-            for (int i = 0; i < json.size();i++){
-                if(json.get(i).getKey().equals(key)){
-                    json.set(i,value);
-                    break;
+            if(isKey(key)){
+                for (int i = 0; i < json.size();i++){
+                    if(json.get(i).getKey().equals(key)){
+                        json.set(i,value);
+                        break;
+                    }
                 }
+            }else {
+                json.add(value);
             }
         }
     }

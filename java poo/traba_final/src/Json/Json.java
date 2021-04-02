@@ -22,11 +22,11 @@ public class Json extends JsonAbstract{
 
     @Override
     public String toString() {
-        String toString = "";
+        String toString = "{";
         for (Array_js array_js : json){
             toString += array_js.toString();
         }
-        toString+="";
+        toString+="}";
         return toString;
     }
 }

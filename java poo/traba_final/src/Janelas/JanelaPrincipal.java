@@ -2,7 +2,6 @@ package Janelas;
 
 import Conexao.Conexao;
 import File.Historico;
-import Json.Json;
 import Mensagem.Mensagem;
 import Usuario.Usuario;
 
@@ -13,13 +12,15 @@ import java.awt.event.WindowEvent;
 public class JanelaPrincipal extends JFrame {
 
     private static JanelaPrincipal _this;
+
+    private JButton escrever;
+
     private PanelPastas pastas = PanelPastas.getInstance();
     private PanelMensagens mensagens = PanelMensagens.getInstance();
     private PanelMensagem mensagem = PanelMensagem.getInstance();
     private PanelEnviar enviar = PanelEnviar.getInstance();
 
-    private JButton escrever;
-
+    private String tempPasta = "null";
 
     public static JanelaPrincipal getJanela() {
         if (_this == null) _this = new JanelaPrincipal();
@@ -34,8 +35,11 @@ public class JanelaPrincipal extends JFrame {
             if(enviar.isVisible()){
                 enviar.salvarRascunho();
             }
+            enviar.clear();
+
             enviar.setVisible(true);
             enviar.setRemetente();
+
             mensagem.setVisible(false);
         });
 
@@ -46,44 +50,44 @@ public class JanelaPrincipal extends JFrame {
             }
         });
 
-
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(pastas, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addContainerGap()
-                                                .addComponent(escrever, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
-                                .addComponent(mensagens, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(0, 0, 0)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(mensagem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(enviar, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(mensagens, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(escrever)
-                                .addGap(0, 0, 0)
-                                .addComponent(pastas, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(enviar, javax.swing.GroupLayout.Alignment.LEADING,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(mensagem, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addContainerGap())
-        );
-
+        {
+            GroupLayout layout = new GroupLayout(getContentPane());
+            getContentPane().setLayout(layout);
+            layout.setHorizontalGroup(
+                    layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                            .addComponent(pastas, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(layout.createSequentialGroup()
+                                                    .addContainerGap()
+                                                    .addComponent(escrever, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
+                                    .addComponent(mensagens, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(0, 0, 0)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(mensagem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(enviar, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                            javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addContainerGap())
+            );
+            layout.setVerticalGroup(
+                    layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(mensagens, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(escrever)
+                                    .addGap(0, 0, 0)
+                                    .addComponent(pastas, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                            javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(enviar, javax.swing.GroupLayout.Alignment.LEADING,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(mensagem, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                    javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addContainerGap())
+            );
+        }
         pack();
         setSize(1280, 700);
         setLocationRelativeTo(null);
@@ -97,19 +101,18 @@ public class JanelaPrincipal extends JFrame {
             if(aux!=null){
                 mensagem.updateEmail((Mensagem) (aux));
             }
-            System.out.println("Selecao no List foi: " + ((JList) e.getSource()).getSelectedValue());
+            //System.out.println("Selecao no List foi: " + ((JList) e.getSource()).getSelectedValue());
         });
     }
 
-    private String tempPasta = "null";
     private void addUpdateMensagens() {
         pastas.addListener(e -> {
             if(!e.getPath().toString().contains(tempPasta)){
                 Object[] aux =  e.getPath().getPath();
                 tempPasta = aux[aux.length-1].toString();
-                if(!enviar.isVisible()){
+                if(enviar.isVisible()){
                     enviar.salvarRascunho();
-                    //Historico.getInstance().salvarRascunhos(new Json());
+
                 }
                 enviar.setVisible(false);
                 mensagem.setVisible(true);
