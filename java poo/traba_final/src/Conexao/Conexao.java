@@ -53,14 +53,11 @@ public class Conexao{
         return info.isKey("okay");
     }
 
-
     private String conectar(String lugar,String mensagem){
         String resposta = null;
         try {
-            //socket = new Socket("25.81.21.225",80);
             socket = new Socket("catolicasc-bigdata-valmor123.mybluemix.net",80);
 
-            //socket = new Socket("viacep.com.br",80);
             enviarMensagem(lugar, mensagem);
             resposta = lerDoServidor();
             socket.close();
@@ -71,7 +68,6 @@ public class Conexao{
     }
 
     private void enviarMensagem(String lugar,String mensagem) throws IOException {
-        //mensagem = "{\"login\"={\"user-id\":\"user\"}}";
         mensagem = mensagem.replace(" ","%20");
 
         PrintStream printer = new PrintStream(socket.getOutputStream());

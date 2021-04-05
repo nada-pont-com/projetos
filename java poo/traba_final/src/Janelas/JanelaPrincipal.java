@@ -8,6 +8,7 @@ import Usuario.Usuario;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Vector;
 
 public class JanelaPrincipal extends JFrame {
 

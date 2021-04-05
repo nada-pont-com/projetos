@@ -7,6 +7,7 @@ import Mensagem.Mensagem;
 
 import javax.print.attribute.standard.Sides;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class Historico {
@@ -45,10 +46,20 @@ public class Historico {
                     if(mensagens==null){
                         mensagens = novasMensagens;
                     }else{
-                        Mensagem msg = null;
+                        boolean valida;
+                        ArrayList<String> keys =  mensagens.getKeys();
                         for (String key : novasMensagens.getKeys()){
-                            msg = new Mensagem(novasMensagens.getValuesAsKey(key));
-                            mensagens.setValue(msg.toJson("key").getArray_js("key"));
+                            Array_js aux = novasMensagens.getValuesAsKey(key);
+                            valida = true;
+                            for (int i =0; i < keys.size();i++){
+                                if(mensagens.getValuesAsKey(keys.get(i)).getValuesAsKey("_id").getValue().equals(aux.getValuesAsKey("_id").getValue())){
+                                    keys.remove(i);
+                                    valida = false;
+                                    break;
+                                }
+                            }
+                            if(valida)
+                                mensagens.setValue(aux);
                         }
                     }
 
