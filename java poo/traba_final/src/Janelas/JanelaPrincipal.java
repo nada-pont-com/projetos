@@ -8,7 +8,6 @@ import Usuario.Usuario;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Vector;
 
 public class JanelaPrincipal extends JFrame {
 
@@ -100,7 +99,12 @@ public class JanelaPrincipal extends JFrame {
         mensagens.addListener(e -> {
             Object aux = ((JList) e.getSource()) .getSelectedValue();
             if(aux!=null){
-                mensagem.updateEmail((Mensagem) (aux));
+                if(tempPasta.contains("Rascunhos")){
+                    enviar.visible(true);
+                    mensagem.visible(false);
+                    enviar.updateRascunho((Mensagem) (aux));
+                }else
+                    mensagem.updateEmail((Mensagem) (aux));
             }
             //System.out.println("Selecao no List foi: " + ((JList) e.getSource()).getSelectedValue());
         });
@@ -108,15 +112,14 @@ public class JanelaPrincipal extends JFrame {
 
     private void addUpdateMensagens() {
         pastas.addListener(e -> {
+            System.out.println(e.getPath().toString());
             if(!e.getPath().toString().contains(tempPasta)){
                 Object[] aux =  e.getPath().getPath();
                 tempPasta = aux[aux.length-1].toString();
-                if(enviar.isVisible()){
+                if(enviar.visible()){
                     enviar.salvarRascunho();
-
                 }
-                enviar.setVisible(false);
-                mensagem.setVisible(true);
+                resetView();
                 mensagem.clear();
             }
 
@@ -128,10 +131,17 @@ public class JanelaPrincipal extends JFrame {
                 if (conexao.getMensagens(Usuario.getIntance().getUserId())) {
                     mensagens.updateLista(Historico.getInstance().getMensagesRecebidas());
                 }
-            } else {
+            } else if(e.getPath().toString().contains("Send")){
                 mensagens.updateLista(Historico.getInstance().getMensagesEnviadas());
+            }else if(e.getPath().toString().contains("Rascunhos")){
+                mensagens.updateLista(Historico.getInstance().getMensagesRascunhos());
             }
         });
+    }
+
+    public void resetView(){
+        enviar.visible(false);
+        mensagem.visible(true);
     }
 
     private void sair() {

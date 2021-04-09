@@ -4,6 +4,7 @@ import Json.Array_js;
 import Json.Json;
 
 public class Mensagem {
+    private int id;
     private String mensagem;
     private String assunto;
     private String rementente;
@@ -18,6 +19,8 @@ public class Mensagem {
             this.mensagem = aux.getValue();
             this.assunto = mensagem.getValuesAsKey("assunto").getValue();
             this.rementente = mensagem.getValuesAsKey("remetente").getValue();
+            this.destinatario = mensagem.getValuesAsKey("destinatario") != null ? mensagem.getValuesAsKey(
+                    "destinatario").getValue() : null;
         }
     }
 
@@ -61,12 +64,17 @@ public class Mensagem {
         this.enviar = enviar;
     }
 
-    public Json toJson(String key, boolean enviar){
+    public Json toJson(String key, boolean enviar,boolean lista){
         setEnviar(enviar);
-        return toJson(key);
+        return toJson(key,lista);
     }
 
     public Json toJson(String key){
+        return toJson(key,false,false);
+    }
+
+    public Json toJson(String key,boolean lista){
+
         Json json = new Json();
 
         Array_js aux = new Array_js(key,"");
@@ -77,7 +85,12 @@ public class Mensagem {
         if(enviar){
             aux.setValue(new Array_js("destinatario",destinatario));
         }
-
+        if(lista){
+            Array_js extra =  new Array_js(key,"");
+            extra.setList();
+            extra.setValue(aux);
+            aux = extra;
+        }
         json.setArray_js(aux);
         System.out.println(json);
 

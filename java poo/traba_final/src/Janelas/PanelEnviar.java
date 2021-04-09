@@ -96,7 +96,7 @@ public class PanelEnviar extends PanelBase{
         mensagem.setDestinatario(destinatario.getText());
         mensagem.setRementente(remetente.getText());
 
-        rascunho = mensagem.toJson("mensagens",true);
+        rascunho = mensagem.toJson("mensagens",true,true);
         Historico.getInstance().salvarRascunhos(rascunho);
         System.out.println(rascunho);
     }
@@ -111,8 +111,9 @@ public class PanelEnviar extends PanelBase{
             mensagem.setRementente(remetente.getText());
 
             if(Conexao.getInstance().enviarEmail(mensagem)){
+                Historico.getInstance().salvarMensagensEnviadas(mensagem.toJson("mensagens",true,true));
                 clear();
-                visible(false);
+                JanelaPrincipal.getJanela().resetView();
             }
         });
     }
@@ -127,5 +128,12 @@ public class PanelEnviar extends PanelBase{
         conteudo.setText("");
         destinatario.setText("");
         remetente.setText("");
+    }
+
+    public void updateRascunho(Mensagem mensagem) {
+        conteudo.setText(mensagem.getMensagem());
+        remetente.setText(mensagem.getMensagem());
+        assunto.setText(mensagem.getAssunto());
+        destinatario.setText(mensagem.getDestinatario());
     }
 }

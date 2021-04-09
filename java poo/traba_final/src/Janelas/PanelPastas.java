@@ -17,7 +17,7 @@ public class PanelPastas extends JPanel{
     private PanelPastas(){
         DefaultMutableTreeNode root  = new DefaultMutableTreeNode("Pastas de Email");
         DefaultMutableTreeNode inbox = new DefaultMutableTreeNode("Inbox");
-        DefaultMutableTreeNode sent  = new DefaultMutableTreeNode("Sent");
+        DefaultMutableTreeNode sent  = new DefaultMutableTreeNode("Send");
         DefaultMutableTreeNode rascunhos  = new DefaultMutableTreeNode("Rascunhos");
 
         root.add(inbox);

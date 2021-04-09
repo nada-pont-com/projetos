@@ -69,6 +69,7 @@ public class Conexao{
 
     private void enviarMensagem(String lugar,String mensagem) throws IOException {
         mensagem = mensagem.replace(" ","%20");
+        mensagem = mensagem.replace("\n","%0A");
 
         PrintStream printer = new PrintStream(socket.getOutputStream());
             System.out.println("GET /"+lugar+"?json="+mensagem+" HTTP/1.1");

@@ -5,7 +5,6 @@ import Json.Conversor;
 import Json.Json;
 import Mensagem.Mensagem;
 
-import javax.print.attribute.standard.Sides;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -32,7 +31,7 @@ public class Historico {
         return true;
     }
 
-    private boolean salvar(GerenciadorArquivos file,Json novas){
+    private boolean salvar(GerenciadorArquivos file,Json novas, boolean id){
         if(validaArquivo(file)){
             try {
                 if(novas.isKey("mensagens")){
@@ -51,14 +50,15 @@ public class Historico {
                         for (String key : novasMensagens.getKeys()){
                             Array_js aux = novasMensagens.getValuesAsKey(key);
                             valida = true;
-                            for (int i =0; i < keys.size();i++){
-                                if(mensagens.getValuesAsKey(keys.get(i)).getValuesAsKey("_id").getValue().equals(aux.getValuesAsKey("_id").getValue())){
-                                    keys.remove(i);
-                                    valida = false;
-                                    break;
+                            if(id)
+                                for (int i =0; i < keys.size();i++){
+                                    if(mensagens.getValuesAsKey(keys.get(i)).getValuesAsKey("_id").getValue().equals(aux.getValuesAsKey("_id").getValue())){
+                                        keys.remove(i);
+                                        valida = false;
+                                        break;
+                                    }
                                 }
-                            }
-                            if(valida)
+                            if(valida || !id)
                                 mensagens.setValue(aux);
                         }
                     }
@@ -78,17 +78,22 @@ public class Historico {
 
     public boolean salvarRascunhos(Json rascunho) {
         GerenciadorArquivos gerenciadorArquivos = new GerenciadorArquivos("rascunhos");
-        return salvar(gerenciadorArquivos,rascunho);
+        return salvar(gerenciadorArquivos,rascunho,false);
     }
 
     public boolean salvarMensagensRecebidas(Json novas){
         GerenciadorArquivos gerenciadorArquivos = new GerenciadorArquivos("recebidos");
-        return salvar(gerenciadorArquivos,novas);
+        return salvar(gerenciadorArquivos,novas,true);
     }
 
     public boolean salvarMensagensEnviadas(Json novas){
         GerenciadorArquivos gerenciadorArquivos = new GerenciadorArquivos("enviadas");
-        return salvar(gerenciadorArquivos,novas);
+        return salvar(gerenciadorArquivos,novas,false);
+    }
+
+    public Vector<Mensagem> getMensagesRascunhos(){
+        GerenciadorArquivos gerenciadorArquivos = new GerenciadorArquivos("rascunhos");
+        return getMensagens(gerenciadorArquivos);
     }
 
     public Vector<Mensagem> getMensagesRecebidas(){
@@ -109,6 +114,7 @@ public class Historico {
             try {
                 String test = gerenciadorArquivos.lerDoArquivo();
                 Json json = Conversor.getJson(test);
+                System.out.println(json);
 
                 mensagensJson = json.getArray_js("mensagens");
                 //mensagensJson = mensagensJson.getValuesAsKey("mensagens");
