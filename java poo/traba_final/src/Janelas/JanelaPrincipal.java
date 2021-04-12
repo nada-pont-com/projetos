@@ -88,6 +88,8 @@ public class JanelaPrincipal extends JFrame {
                                     .addContainerGap())
             );
         }
+
+
         pack();
         setSize(1280, 700);
         setLocationRelativeTo(null);
@@ -124,8 +126,6 @@ public class JanelaPrincipal extends JFrame {
             }
 
             if (e.getPath().toString().contains("Inbox")) {
-
-
                 System.out.println("Selecao foi: " + e.getPath());
                 Conexao conexao = Conexao.getInstance();
                 if (conexao.getMensagens(Usuario.getIntance().getUserId())) {

@@ -47,6 +47,15 @@ public class Array_js extends Objeto{
         this.value = value;
     }
 
+    public void removeArrayByKey(String key){
+        for (Array_js array_js : json) {
+            if (array_js.getKey().equals(key)) {
+                json.remove(array_js);
+                break;
+            }
+        }
+    }
+
     public void updateValueAsKey(String key,String value){
         boolean valida = false;
         if(value!=null){
@@ -57,7 +66,7 @@ public class Array_js extends Objeto{
                     }
                     array_js.setList(false);
                     array_js.setObj(false);
-                    this.value = value;
+                    array_js.value = value;
                     valida = true;
                     break;
                 }

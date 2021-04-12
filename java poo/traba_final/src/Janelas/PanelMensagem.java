@@ -28,9 +28,9 @@ public class PanelMensagem extends PanelBase{
                 .addGroup(jPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(remetente, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(destinatario, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(mensagem_corpo, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
-                        .addComponent(destinatario, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(remetente, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(assunto, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addContainerGap()));
 
@@ -38,11 +38,11 @@ public class PanelMensagem extends PanelBase{
             jPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(GroupLayout.Alignment.TRAILING, jPanelLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(assunto, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(remetente, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(remetente, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(destinatario, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(destinatario, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(assunto, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(mensagem_corpo, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap())
@@ -63,14 +63,16 @@ public class PanelMensagem extends PanelBase{
 
     public void updateEmail(Mensagem mensagem){
         mensagem_corpo.setText(mensagem.getMensagem());
-        assunto.setText(mensagem.getAssunto());
-        remetente.setText(mensagem.getRementente());
-        destinatario.setText(Usuario.getIntance().getUserId());
+        assunto.setText("Ass: "+mensagem.getAssunto());
+        remetente.setText("Rementente: "+mensagem.getRementente());
+        destinatario.setText("Destinatario: "+ (mensagem.getDestinatario()==null ? Usuario.getIntance().getUserId() :
+                mensagem.getDestinatario()));
     }
 
     public void clear() {
         mensagem_corpo.setText("");
         assunto.setText("");
         remetente.setText("");
+        destinatario.setText("");
     }
 }

@@ -4,7 +4,7 @@ import Json.Array_js;
 import Json.Json;
 
 public class Mensagem {
-    private int id;
+    private String id;
     private String mensagem;
     private String assunto;
     private String rementente;
@@ -15,12 +15,15 @@ public class Mensagem {
 
     public Mensagem(Array_js mensagem){
         Array_js aux = mensagem.getValuesAsKey("texto");
+        System.out.println(mensagem);
         if(aux!=null){
             this.mensagem = aux.getValue();
             this.assunto = mensagem.getValuesAsKey("assunto").getValue();
             this.rementente = mensagem.getValuesAsKey("remetente").getValue();
             this.destinatario = mensagem.getValuesAsKey("destinatario") != null ? mensagem.getValuesAsKey(
                     "destinatario").getValue() : null;
+            this.id = mensagem.getValuesAsKey("_id") != null ? mensagem.getValuesAsKey(
+                    "_id").getValue() : null;
         }
     }
 
@@ -64,13 +67,17 @@ public class Mensagem {
         this.enviar = enviar;
     }
 
-    public Json toJson(String key, boolean enviar,boolean lista){
-        setEnviar(enviar);
-        return toJson(key,lista);
+    public String getId() {
+        return id;
     }
 
-    public Json toJson(String key){
-        return toJson(key,false,false);
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Json toJson(String key, boolean enviar, boolean lista){
+        setEnviar(enviar);
+        return toJson(key,lista);
     }
 
     public Json toJson(String key,boolean lista){
@@ -86,6 +93,7 @@ public class Mensagem {
             aux.setValue(new Array_js("destinatario",destinatario));
         }
         if(lista){
+            aux.setValue(new Array_js("_id",id));
             Array_js extra =  new Array_js(key,"");
             extra.setList();
             extra.setValue(aux);
@@ -99,6 +107,6 @@ public class Mensagem {
 
     @Override
     public String toString() {
-        return mensagem;
+        return mensagem.equals("")? "Sem Mensagem" :  mensagem;
     }
 }

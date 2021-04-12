@@ -22,7 +22,8 @@ public class Conexao{
 
     public String login(String user){
         String mensagem = "{ \"login\": { \"user-id\": \""+user+"\" } }";
-        //mensagem = conectar("login",mensagem);
+        mensagem = conectar("login",mensagem);
+        //return mensagem;
         return "{ \"okay\": { \"message\":\"login aceito” } }";
     }
 
@@ -41,7 +42,7 @@ public class Conexao{
     }
 
     public boolean enviarEmail(Mensagem mensagem){
-        return enviarEmail(mensagem.toJson("send",true));
+        return enviarEmail(mensagem.toJson("send",true,false));
     }
 
     public boolean enviarEmail(Json json){
@@ -72,7 +73,7 @@ public class Conexao{
         mensagem = mensagem.replace("\n","%0A");
 
         PrintStream printer = new PrintStream(socket.getOutputStream());
-            System.out.println("GET /"+lugar+"?json="+mensagem+" HTTP/1.1");
+            //System.out.println("GET /"+lugar+"?json="+mensagem+" HTTP/1.1");
         printer.println("GET /"+lugar+"?json="+mensagem+" HTTP/1.1");
         printer.println("Accept: */*");
         printer.println("Host: catolicasc-bigdata-valmor123.mybluemix.net");

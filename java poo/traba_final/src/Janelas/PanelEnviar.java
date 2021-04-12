@@ -19,6 +19,7 @@ public class PanelEnviar extends PanelBase{
     private PlaceholderTextField assunto;
     private PlaceholderTextField destinatario;
     private JLabel remetente;
+    private String _id;
 
     private static PanelEnviar _this;
 
@@ -37,14 +38,20 @@ public class PanelEnviar extends PanelBase{
         assunto = new PlaceholderTextField();
         destinatario = new PlaceholderTextField();
         remetente = new JLabel();
-        JScrollPane jScrollPane = new javax.swing.JScrollPane();
 
         assunto.setPlaceholder("Assunto");
         destinatario.setPlaceholder("Destinatario");
+
         addActionEnviar();
+        addActionDescartarEmail();
+
+        JScrollPane jScrollPane = new javax.swing.JScrollPane();
         jScrollPane.setViewportView(conteudo);
+
         remetente.setBorder(BorderFactory.createBevelBorder(1));
+
         GroupLayout layout = new GroupLayout(this);
+
         this.setLayout(layout);
 
         {
@@ -86,6 +93,18 @@ public class PanelEnviar extends PanelBase{
         }
     }
 
+    private void addActionDescartarEmail(){
+        cancelar.addActionListener(e -> {
+            if(_id!=null){
+                Mensagem mensagem = new Mensagem();
+                mensagem.setId(_id);
+                Historico.getInstance().removeRascunho(mensagem.toJson("mensagens",true,true));
+            }
+            clear();
+            JanelaPrincipal.getJanela().resetView();
+        });
+    }
+
     public void salvarRascunho(){
         Json rascunho;
 
@@ -95,6 +114,7 @@ public class PanelEnviar extends PanelBase{
         mensagem.setMensagem(conteudo.getText());
         mensagem.setDestinatario(destinatario.getText());
         mensagem.setRementente(remetente.getText());
+        mensagem.setId(_id);
 
         rascunho = mensagem.toJson("mensagens",true,true);
         Historico.getInstance().salvarRascunhos(rascunho);
@@ -112,6 +132,10 @@ public class PanelEnviar extends PanelBase{
 
             if(Conexao.getInstance().enviarEmail(mensagem)){
                 Historico.getInstance().salvarMensagensEnviadas(mensagem.toJson("mensagens",true,true));
+                if(_id!=null){
+                    mensagem.setId(_id);
+                    Historico.getInstance().removeRascunho(mensagem.toJson("mensagens",true,true));
+                }
                 clear();
                 JanelaPrincipal.getJanela().resetView();
             }
@@ -128,12 +152,14 @@ public class PanelEnviar extends PanelBase{
         conteudo.setText("");
         destinatario.setText("");
         remetente.setText("");
+        _id = null;
     }
 
     public void updateRascunho(Mensagem mensagem) {
         conteudo.setText(mensagem.getMensagem());
-        remetente.setText(mensagem.getMensagem());
+        remetente.setText(mensagem.getRementente());
         assunto.setText(mensagem.getAssunto());
         destinatario.setText(mensagem.getDestinatario());
+        _id = mensagem.getId();
     }
 }
