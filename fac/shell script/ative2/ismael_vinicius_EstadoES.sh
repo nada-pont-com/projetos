@@ -3,41 +3,51 @@
 # Vinicius Dall Olivo Gonçalves
 # Ismael de Toledo Medeiros
 
+#data
+data=$(date +%Y%m%d)
 
 # user
-echo user=$USER
+ user=$USER
 
 # - Nome do host
-echo hostname
+userHost=$(hostname)
 
 # - Qtde. de Processadores
-# http://www.bosontreinamentos.com.br/linux/certificacao-lpic-1/descobrindo-informacoes-sobre-o-processador-de-seu-computador-com-lscpu/
+qtdProcessador=$(lscpu -pCPU,Core,Socket | egrep -v '^#' | sort -u -t, -k 3 | wc -l)
 
 # - Qtde de núcleos
-echo cat /proc/cpuinfo | grep processor | wc -l
-echo grep "model name" /proc/cpuinfo | wc -l
+qtdNucleos=$(lscpu -pCPU,Core,Socket | egrep -v '^#' | sort -u -t, -k 2,3 | wc -l)
 
 # - Qtde. total RAM
-echo free -g
+totalRam=$(cat /proc/meminfo | grep MemTotal | awk '{print $2}')
 
 # - Qtde de Hubs USB
-echo lsusb
+qtdUSB=$(lsusb | wc -l)
 
 # - Qtde. USB Ativa
-echo dmesg | grep usb -i
+
 
 # - Modelo Placa de rede Ethernet/WiFi (a que estiver em uso)
-echo lspci | grep Ethernet
+placaNet=$(lspci | grep Ethernet | cut -f3 -d":")
 
 # - Velocidade Ethernet/WiFi (a que estiver em uso)
 
 # - Quantidade de discos (HD/SSD)
-echo lsblk | grep disk
+qtdDisco=$(lsblk -o SIZE,TYPE | grep disk | wc -l)
 
 # - Capacidade HD/SSD (Gb)
-echo cat /proc/meminfo | grep MemTotal | awk '{print $2}'
-echo free -g
+capacidade=$(lsblk -o SIZE,TYPE | grep disk | cut -f3 -d" ")
 
 # - Modelo Placa Vídeo
-echo lspci | grep VGA
+placaVideo=$(lspci | grep VGA |cut -f3 -d":")
 
+# ismael_vinicius__${data}EstadoES${user}.csv
+
+FILE=ismael_vinicius__${data}EstadoES${user}.csv
+
+if [[ ! -e "$FILE" ]]; then 
+    echo "$FILE not exist" 
+    echo "Data (AAAAMMDD-HH:MM:SS), Usuário corrente, Nome do host, Qtde. de Processadores, Qtde de núcleos, Qtde. total RAM, Qtde de Hubs USB,  Qtde. USB Ativa, Modelo Placa de rede Ethernet/WiFi, Velocidade Ethernet/WiFi, Quantidade de discos, Capacidade HD/SSD, Modelo Placa Vídeo" >> $FILE
+fi
+
+echo "${data}, ${user}, ${userHost}, ${qtdProcessador}, ${qtdNucleos}, ${totalRam}, ${qtdUSB},, ${placaNet},, ${qtdDisco}, ${capacidade}, ${placaVideo}" >> $FILE
