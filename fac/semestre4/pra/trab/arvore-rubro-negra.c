@@ -27,6 +27,7 @@ NoRubNg* criarNo(Arvore* arvore, NoRubNg* pai, int valor) {
 }
 
 NoRubNg* adicionarNo(Arvore* arvore, NoRubNg* no, int valor) {
+    nrRub++;
     if (valor > no->valor) {
         if (no->direita == arvore->nulo) {
             no->direita = criarNo(arvore, no, valor);     
