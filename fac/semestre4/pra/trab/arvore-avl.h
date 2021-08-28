@@ -8,6 +8,7 @@ typedef struct noAvl {
     struct noAvl* esquerda;
     struct noAvl* direita;
     int valor;
+    int altura;
 } NoAvl;
 
 typedef struct arvoreAvl {
@@ -17,6 +18,8 @@ typedef struct arvoreAvl {
 ArvoreAvl* criarArvoreAvl();
 NoAvl* adicionarAvl(ArvoreAvl* arvore, int valor);
 void balanceamento(ArvoreAvl*, NoAvl*);
+void percorrerProfundidadeInOrderAvl(NoAvl* no, void (*callback)(int));
+void visitarAvl(int valor);
 int altura(NoAvl*);
 int fb(NoAvl*);
 NoAvl* rsd(ArvoreAvl*, NoAvl*);

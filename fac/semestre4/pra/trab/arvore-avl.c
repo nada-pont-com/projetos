@@ -56,7 +56,6 @@ NoAvl* adicionarAvl(ArvoreAvl* arvore, int valor) {
     if (arvore->raiz == NULL) {
         nrAvl++;
 
-        // printf("Adicionando %d\n",valor);
         NoAvl* novo = malloc(sizeof(NoAvl));
         novo->valor = valor;
         
@@ -174,10 +173,10 @@ void balanceamento(ArvoreAvl* arvore, NoAvl* no) {
 
 int altura(NoAvl* no){
     int esquerda = 0,direita = 0;
-
+    
     if (no->esquerda != NULL) {
         esquerda = altura(no->esquerda) + 1;
-    }
+    } 
 
     if (no->direita != NULL) {
         direita = altura(no->direita) + 1;
@@ -232,7 +231,7 @@ NoAvl* rsd(ArvoreAvl* arvore, NoAvl* no) {
   
     no->esquerda = esquerda->direita;
     no->pai = esquerda;
-  
+
     esquerda->direita = no;
     esquerda->pai = pai;
 

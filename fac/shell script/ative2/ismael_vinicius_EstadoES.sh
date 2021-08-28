@@ -40,13 +40,6 @@ sum=0
 # - Capacidade HD/SSD (Gb)
 capacidade=$(lsblk -b -io SIZE,TYPE | grep disk | awk 'BEGIN{OFS="\t"} {print $1/1073741824;}'| awk '{ sum += $1 } END { print sum" GB" }')
 
-# capacidade=0
-# tam=$(wc -l <<< $capacidades)
-
-# for ((i=0;i<$tam;i++)); do
-
-# done
-
 # - Modelo Placa Vídeo
 placaVideo=$(lspci | grep VGA |cut -f3 -d":" | tr "\n" " ")
 

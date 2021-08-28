@@ -1,0 +1,7 @@
+./ative2/ismael_vinicius__20210731EstadoESnada.csv
+./ative3/ismael_vinicius_ultimoacesso.sh
+./ative3/ismael_vinicius__AcessoRecente_20210814.txt
+./ative3/ismael_vinicius__AcessoRecente_< >_<data_origem>.txt
+./ProcessosSistema (1).sh
+./ProcessosSistema.sh
+./VerificarPrograma.sh
