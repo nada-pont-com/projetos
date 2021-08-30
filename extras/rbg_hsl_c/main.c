@@ -97,3 +97,81 @@ void main(){
     double* rgb = hsl_to_rgb(hsl[0],hsl[1],hsl[2]);
     printf("Red:%.2f Green:%.2f Blue:%.2f\n",rgb[0],rgb[1],rgb[2]);
 }
+
+
+    /*
+        public function rgb_to_hsl($r, $g, $b){
+            $R = $r/255;
+            $G = $g/255;
+            $B = $b/255;
+
+            $cMax = max($R,$G,$B);
+            $cMin = min($R,$G,$B);
+            $h = 0;
+            $s = 0;
+            $delta = $cMax-$cMin;
+            $l = ($cMax+$cMin)/2;
+
+            if($delta==0){
+                $h = 0;
+            }else if ($cMax==$R){
+                $h = 60*( ( ($G-$B) /$delta) % 6 );
+            }else if($cMax==$B){
+                $h = 60*( (($B-$R) /$delta) + 2 );
+            }else if($cMax==$G){
+                $h = 60*( (($R-$G) /$delta) + 4 );
+            }
+
+            if($delta!=0){
+                $aux = (2*$l -1);
+                $aux = $aux<0 ?  $aux*-1 : $aux;
+                $s = $delta/ (1 - $aux);
+            }
+
+            return [$h,$s,$l];
+        }
+
+        public function hsl_to_rgb($h, $s, $l){
+            $aux = (2*$l-1);
+            $aux = $aux<0 ?  $aux*-1 : $aux;
+
+            $c = (1 - $aux) * $s;
+            
+            $aux = ((($h/60) % 2) -1);
+            $aux = $aux<0 ?  $aux*-1 : $aux;
+
+            $x = $c * (1 - $aux);
+            $m = $l - ($c/2);
+
+            if(0<=$h && $h<60){
+                $rgb[0] = $c;
+                $rgb[1] = $x;
+                $rgb[2] = 0;
+            }else if (60<=$h && $h<120){
+                $rgb[0] = $x;
+                $rgb[1] = $c;
+                $rgb[2] = 0;
+            }else if (120<=$h && $h<180){
+                $rgb[0] = 0;
+                $rgb[1] = $c;
+                $rgb[2] = $x;
+            }else if (180<=$h && $h<240){
+                $rgb[0] = 0;
+                $rgb[1] = $x;
+                $rgb[2] = $c;
+            }else if (240<=$h && $h<300){
+                $rgb[0] = $x;
+                $rgb[1] = 0;
+                $rgb[2] = $c;
+            }else if (300<=$h && $h<360){
+                $rgb[0] = $c;
+                $rgb[1] = 0;
+                $rgb[2] = $x;
+            }
+
+            for ($i = 0; $i < 3; $i++){
+                $rgb[$i] = ($rgb[$i]+$m)*255;
+            }
+            return $rgb;
+        }
+    */

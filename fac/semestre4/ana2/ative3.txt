@@ -1,0 +1,11 @@
+rio
+acapita agua
+reservatorio agua
+passa por estação de tratamento
+transferencia
+sensor de nivel alto -> estado: ligado, desligado
+Bomba do rio -> estado: ligado, desligado
+sensor nivel critico -> estado: ligado, desligado
+Caixa de agua
+sensor de nivel baixo -> estado: ligado, desligado
+bomba

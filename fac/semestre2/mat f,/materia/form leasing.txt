@@ -1,0 +1,23 @@
+p = 75000
+vrg = 15000
+i = 0.0185
+n = 84
+R = (p-vrg) * ((1+i)^n *i)/((1+i)^n-1) + i*vrg
+
+CDC
+
+taxa seria 2.05%  i = 0.0205
+R = p * ((1+i)^n *i)/((1+i)^n-1) 
+
+p = R*((1+i)^n-1) / ((1+i)^n *i)
+
+p -R = R*((1+i)^n-1) / ((1+i)^n *i)
+
+R = p / ( ((1+i)^(n-1)-1) / ((1+i)^(n-1) *i) + 1)
+
+
+S = R * ((1+i)^n - 1) / i
+
+
+Calculo de juros em serie
+

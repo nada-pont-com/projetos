@@ -1,0 +1,8 @@
+Formas canônicas:
+
+Formas disjuntivas = minitermos = sinal mutiplicação =  E = F(a,b,c) = a . b . c = 1
+Formas conjuntivas = maxitermos = sinal soma = OU = F(a,b,c) = a + b + c = 0
+
+
+
+
