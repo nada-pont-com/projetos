@@ -1,0 +1,2 @@
+Data (AAAAMMDD-HH:MM:SS), Usuário corrente, Nome do host, Qtde. de Processadores, Qtde de núcleos, Qtde. total do processador em uso (%), Qtde. total RAM, Qtde. total de RAM livre, Qtde de Hubs USB,  Qtde. USB Ativa, Modelo Placa de rede Ethernet/WiFi, Velocidade Ethernet/WiFi, Quantidade de discos, Capacidade HD/SSD, Modelo Placa Vídeo
+20220113, nada, nada, 1, 1, 0.1, 3.83984 GB,2.59533 GB, 4,,  Intel Corporation 82540EM Gigabit Ethernet Controller (rev 02) ,, 2, 11 GB,  VMware SVGA II Adapter 
