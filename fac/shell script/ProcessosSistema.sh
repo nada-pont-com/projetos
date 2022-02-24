@@ -57,9 +57,14 @@ else
             threadsU=$(($threadsU - 3))
         fi
 
-        data=$(date +%Y%m%d_%H%M%S)
+        data=$(date +%Y%m%d)
 
-        echo "Processo Ativos SO,Processo Ativos $user,Threads ${user},Processo antigo ${user}, Usuário corrente, Processos exeto ${USER}, Processos root." > "${data}_Processos_${user}.csv"
+        FILE=${data}_Processos_${user}.csv
+
+        if [[ ! -e "$FILE" ]]; then 
+            echo "Número total de processos ativos no sistema,Número de processos ativos do usuário,Quantidade total de threads dos processos do usuário,Processo mais antigo do usuário, Nome do usuário corrente, Quantidade de processos sendo executados, excluindo-se os do usuário corrente, Quantidade de processos sendo executados como root"  >> $FILE
+        fi
+
         echo "${so},${procU},${threadsU},${antigo},${userC},${extoUser},${root}" >> "${data}_Processos_${user}.csv"
     fi
 fi

@@ -1,0 +1,32 @@
+O que é o gerenciamento de escopo?
+R: É o levantamento de tudo que sera feito, organização da ordem das tarefas, definição do escopo do projeto.
+
+Quais são características e funcionalidades que caracterizam o produto ou serviço?
+R:
+
+Qual as principais características do Escopo do projeto e do Escopo do produto?
+R: 
+Escopo do projeto:
+Difinição do trabalho a ser realizado para entregar um produto/serviço.
+Escopo do produto:
+Definição das caracteristicas do produto
+
+Quais os tipos de escopo?
+R: Escopo de projeto ou escopo de produto
+
+Sobre o controle de escopo, liste quais são as entradas.
+R: 
+Plano de gerenciamento
+Declaração do escopo preliminar do projeto
+Termo de abertura do projeto
+Fatores ambientais da empresa
+Ativos de processo organizacionais
+
+Sobre o controle de escopo, liste quais são as ferramentas.
+R:
+Opinião especializada
+Modelos, formulários, normas
+
+Sobre o controle de escopo, liste quais são as saídas.
+R:
+Plano de gerencimento do escopo do projeto

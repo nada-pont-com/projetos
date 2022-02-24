@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "arvore-rubro-negra.c"
-#include "extra.c"
-#include "arvore-b.c"
+#include "arvore-rubro-negra.h"
+#include "avl_arvore.h"
+// #include "arvore-avl.h"
+#include "arvore-b.h"
 
 int geraNumRand(int*,int);
 
@@ -18,19 +19,19 @@ int main() {
 
 	ArvoreB* arvoreB = criaArvoreB(4);
 	Arvore* arvoreRubro = criar();
-	No** arvoreAvl = malloc(sizeof(No*)*1);
-	arvoreAvl[0] = NULL;
+	ArvoreAvl arvoreAvl = criaArvoreAvl();
 
 	ArvoreB** arvoresB = malloc(sizeof(ArvoreB*)*10);
-	// ArvoreAvl** arvoresAvl = malloc(sizeof(ArvoreAvl*)*10);
-	No** arvoresAvl = malloc(sizeof(No*)*10);
+	
+	// ArvoreAvl** ar voresAvl = malloc(sizeof(ArvoreAvl*)*10);
+	ArvoreAvl* arvoresAvl = malloc(sizeof(ArvoreAvl)*10);
 
 	Arvore** arvoresRub = malloc(sizeof(Arvore*)*10);
 	int** nrValores = calloc(10,sizeof(int*));
 
 
 	for (int i = 0; i < 10; i++){
-		arvoresAvl[i] = NULL;
+		arvoresAvl[i] = criaArvoreAvl();
 		arvoresB[i] = criaArvoreB(4);
 		arvoresRub[i] = criar();
 		nrValores[i] = calloc(1000,sizeof(int));
@@ -67,7 +68,7 @@ int main() {
 			nrB_rand[j] += nrB;
 			adicionarRubNg(arvoresRub[j],nr);
 			nrRub_rand[j] += nrRub;
-			insere(&(arvoresAvl[j]),nr);
+			insere((arvoresAvl[j]),nr);
 			nrAvl_rand[j] += nrAvl;
 			
 			nrB   = 0;

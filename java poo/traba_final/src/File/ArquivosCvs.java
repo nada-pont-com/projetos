@@ -2,34 +2,45 @@ package File;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Objects;
+
+;
 
 public class ArquivosCvs {
     private File file;
     private File file2;
+    private String saida;
 
-    public void init(int type){
+    public void init(funcoes type,String file1,String file2,String saida){
+        init(type,file1,file2,saida,"tabela");
+    }
+
+    public void init(funcoes type,String file1,String file2,String saida,String table){
+        this.saida = saida;
         //file = new File("../../../ban2_sqls/trab/dados_AC.csv");
-        file = new File("pasta_lx/arquivoestabelecimento_uf.sql");
-        file2 = new File("pasta_lx/arquivoestabelecimento_municipio_nome.sql");
+        this.file = new File(file1);
+        this.file2 = new File(file2);
         try {
-            switch (type) {
-                case 1 -> rescreveArquivo();
-                case 2 -> separacao();
-                case 3 -> distinciList();
-                case 4 -> distinciListKeyValue();
-                case 5 -> unionListKeyValue();
+            switch (type.ordinal()) {
+                case 0 -> rescreveArquivo(table);
+                case 1 -> separacao();
+                case 2 -> distinciList();
+                case 3 -> distinciListKeyValue();
+                case 4 -> unionListKeyValue();
+                case 5 -> crieKey();
+                case 6 -> subistuicaoKeyValue();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void rescreveArquivo() throws IOException {
-        PrintStream ps = new PrintStream(file2);
+    public void rescreveArquivo(String tabela) throws IOException {
+        PrintStream ps = new PrintStream("sql/"+saida);
         BufferedReader br = new BufferedReader(new FileReader(file));
         ps.println();
 
-        String resposta = "INSERT INTO teste (";
+        String resposta = "INSERT INTO "+tabela+" (";
         String temp = br.readLine();
         resposta+=temp.replace(";",",").replace("\"","")+") VALUES";
         ps.println(resposta);
@@ -86,12 +97,11 @@ public class ArquivosCvs {
         BufferedReader br = new BufferedReader(new FileReader(file));
         ArrayList<PrintStream> files = new ArrayList<>();
 
-        String resposta = "(";
         String temp = br.readLine();
         temp = temp.replace(";",",").replace("'","\"").replace("\"","");
         String[] strings = temp.split(",");
         for (String string : strings) {
-            files.add(new PrintStream(new File("pasta_lx/arquivo"+string+".sql")));
+            files.add(new PrintStream(new File("pasta_lx/arquivo_"+string+".txt")));
         }
         teste(files,strings);
         while(temp != null) {
@@ -102,17 +112,15 @@ public class ArquivosCvs {
                 String[] teste = temp.split("\'");
                 temp = "";
                 for(int i = 0;i<teste.length;i++){
-                    if(teste[i].indexOf(',')!=0){
+                    if(teste[i].indexOf(',')!=0 && i!=0){
                         teste[i] = teste[i].replace(",","%virgula%");
                     }
                     temp += teste[i];
                 }
                 temp = temp.replace("\"","'");
                 String[] a = temp.split(",");
-                //System.out.println(a.length);
-                //System.out.println(temp);
-                teste(files,a);
 
+                teste(files,a);
             }
         }
         br.close();
@@ -129,7 +137,7 @@ public class ArquivosCvs {
 
     public void distinciList() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader(file));
-        PrintStream ps = new PrintStream("pasta_lx/arquivo.txt");
+        PrintStream ps = new PrintStream("pasta_lx/"+saida);
         ArrayList<String> distinct = new ArrayList<>();
 
         String temp = br.readLine();
@@ -148,7 +156,7 @@ public class ArquivosCvs {
     public void distinciListKeyValue() throws IOException{
         BufferedReader key = new BufferedReader(new FileReader(file));
         BufferedReader value = new BufferedReader(new FileReader(file2));
-        PrintStream ps = new PrintStream("pasta_lx/arquivo2.txt");
+        PrintStream ps = new PrintStream("pasta_lx/"+saida);
         ArrayList<String> distinct = new ArrayList<>();
         String keyS = key.readLine();
         String valueS = value.readLine();
@@ -165,24 +173,88 @@ public class ArquivosCvs {
         }
     }
 
-
     public void unionListKeyValue() throws IOException{
         BufferedReader key = new BufferedReader(new FileReader(file));
         BufferedReader value = new BufferedReader(new FileReader(file2));
-        PrintStream ps = new PrintStream("pasta_lx/arquivo2.txt");
-        ArrayList<String> distinct = new ArrayList<>();
+        PrintStream ps = new PrintStream("pasta_lx/"+saida);
         String keyS = key.readLine();
         String valueS = value.readLine();
         ps.println(keyS+","+valueS);
-        distinct.add(keyS);
         while(keyS != null) {
             keyS = key.readLine();
-
             valueS = value.readLine();
             if(keyS!=null){
-                distinct.add(keyS);
+                if(Objects.equals(valueS, "")) valueS = "null";
+                if(Objects.equals(keyS, "")) keyS = "null";
                 ps.println(keyS+","+valueS);
             }
         }
+
+        value.close();
+        key.close();
+        ps.close();
+    }
+
+    public void crieKey() throws IOException{
+        BufferedReader value = new BufferedReader(new FileReader(file));
+        PrintStream ps = new PrintStream("pasta_lx/"+saida);
+        ArrayList<String> values = new ArrayList();
+
+        int key = 0;
+        String valueS = value.readLine();
+        values.add(valueS);
+        ps.println("id,"+valueS);
+        int tamanho = 0;
+        while(valueS != null) {
+            valueS = value.readLine();
+            int aux = values.indexOf(valueS);
+            if(aux==-1){
+                values.add(valueS);
+                tamanho++;
+                key = tamanho;
+            }else  key = aux;
+            if(valueS!=null){
+                ps.println(key+","+valueS);
+            }
+        }
+        value.close();
+        ps.close();
+    }
+
+    void subistuicaoKeyValue()throws IOException{
+        BufferedReader key = new BufferedReader(new FileReader(file));
+        BufferedReader value = new BufferedReader(new FileReader(file2));
+        PrintStream ps = new PrintStream("pasta_lx/"+saida);
+        ArrayList<String> values = new ArrayList<String>();
+        ArrayList<String> keys = new ArrayList<String>();
+
+        String valueS = value.readLine();
+        String keyS = key.readLine();
+        String[] aux = keyS.split(",");
+        values.add(aux[1]);
+        keys.add(aux[0]);
+        //values.add(valueS);
+        ps.println(""+valueS);
+        while(keyS != null) {
+            keyS = key.readLine();
+            if(keyS!=null){
+                aux = keyS.split(",");
+                keys.add(aux[0]);
+                values.add(aux[1]);
+            }
+        }
+
+        while(valueS != null) {
+            valueS = value.readLine();
+            if(valueS!=null){
+                if(values.contains(valueS)){
+                    ps.println(keys.get(values.indexOf(valueS)));
+                }else ps.println("null");
+            }
+        }
+
+        value.close();
+        key.close();
+        ps.close();
     }
 }

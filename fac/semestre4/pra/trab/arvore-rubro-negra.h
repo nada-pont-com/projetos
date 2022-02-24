@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 int nrRub = 0;
 
 enum coloracao { Vermelho, Preto };

@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "arvore-b.h"
 
 ArvoreB* criaArvoreB(int ordem) {

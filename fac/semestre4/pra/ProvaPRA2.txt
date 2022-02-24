@@ -1,0 +1,136 @@
+1) Pre: [20,5,3,12,25,21,28], In: [3,5,12,20,21,25,28] e Pos: [3,12,5,21,28,25,20]
+
+2)Somente I, II e V estão corretas.
+
+3)Somente I, IV e V estão corretas
+
+4)
+Logo após a adição da chave 6 é necessária uma Rotação Dupla a Esquerda(RDE).
+Então o 20 se mantem sendo a raiz, com os filhos 8 a esquerda e o 25 a direita.
+O 25 continua com os filhos 21 e 28.
+O 21 e o 28  continuam não possuindo filhos. 
+O 8 agora possui como filhos o 5 e o 12.
+O 12 possui um único filho a direita sendo ele o 13 que não possui filhos. 
+O 5 tem como filhos o 3 e o 6.
+E o 3 e 6 não possuem filhos.
+
+
+
+         --- 20 ---
+        /          \
+       8           25
+     /   \        /  \
+    5     12    21    28
+   / \     \
+  3   6     13
+
+
+
+
+5)
+Rotação Simples à Esquerda(RSE): Neste caso a sub-árvore está mais alta no lado direito.
+Quando o Fator de balanceamento de um nó é -2 e de seu filho a direita é -1. 
+Sendo a raiz o nó desbalanceado e pivô seu filho da direita fazemos: 
+1. Filho da esquerda do pivô torna-se o filho da direita da raiz. 
+2. A raiz torna-se o filho da esquerda do pivô.
+ 12           20
+   \         /  \
+    20      12   35
+      \
+       35
+
+Rotação Simples à Direita(RSD): Neste caso a sub-árvore está mais profunda no lado esquerdo
+Quando o Fator de balanceamento de um nó é +2 e de de seu filho a esquerda é +1. 
+Sendo a raiz o nó desbalanceado e pivô seu filho da esquerda fazemos: 
+1. Filho da direita do pivô torna-se o filho da esquerda da raiz. 
+2. A raiz torna-se filho da direita do pivô. 
+      35       20
+      /       /  \
+    20      10    35
+    /
+  10	
+
+Rotação Dupla à Esquerda(RDE): Neste caso a sub-árvore está mais alta no lado direito
+Quando o Fator de balanceamento de um nó é -2 e de seu filho da direita é +1. 
+Sendo a raiz o nó desbalanceado e pivô seu filho da direita, fazemos: 
+1. Aplicar uma Rotação Simples à Direita no pivô. 
+2. Aplicar uma Rotação Simples à Esquerda na raiz.
+ 12           20
+   \         /  \
+    35      12   35
+   /
+  20
+
+
+ 
+Rotação Dupla à Direita(RDD): Neste caso a sub-árvore está mais profunda no lado esquerdo
+Quando o Fator de balanceamento de um nó é +2 e e de seu filho da esquerda é -1. 
+Sendo a raiz o nó desbalanceado e pivô seu filho da esquerda fazemos as seguintes operações: 
+1. Aplicar uma Rotação Simples à Esquerda no pivô. 
+2. Aplicar uma Rotação Simples à Direita na raiz.
+      35       20
+      /       /  \
+    10      10    35
+     \
+      20
+
+6)
+Similaridades:
+1- As duas são organizadas da forma de nós.
+2- As duas quando fazem operações de busca, inserção e remoção possem complexidade de tempo logarítmo 
+3- As duas são auto-balanceadas.
+
+Diferenças:
+1- A remoção em árvores AVL segue o mesmo princípio da árvore de busca binária, 
+com a diferença que a cada remoção é necessário verificar o fator de balanceamento e, 
+se necessário, aplicar uma das rotações.
+2- Diferentemente da Árvore AVL, a árvore B possui uma ordem, que indica o número máximo de chaves por nó.
+3- As árvores B utilizam o movimento de suas chaves para manter o balanceamento, enquanto as Árvores AVL 
+possuem operações de rotação.
+4- As árvores AVL que crescem inserindo novos nós nas folhas para baixo, enquanto as árvores B crescem para cima. 
+5- Diferentemente da Árvore AVL, a árvore B é projetada para trabalhar com sistemas utilizando armazenamento em bloco.
+6- As árvores AVL pode ter somente uma chave, enquanto árvores B podem ter conjuntos de chaves 
+com tamanho maior do que um. 
+
+7) Descreva todos os passos necessários para a adição de uma chave em árvores B e 
+cite um exemplo ao adicionar uma chave em um nó cheio.
+
+1. Iniciar localizando o nó folha onde o novo elemento deve ser inserido. 
+2. Caso não esteja cheio, pode ser inserido no nó localizado. 
+3. Caso o nó esteja cheio,  então o elemento mediano é transferido para o nó pai,
+   e o menor elemento da folha é inserido em um novo nó filho do pai do nó escolhido. 
+   Caso a divisão ocorrer na raiz, será adicionado um novo nível na árvore
+4. Após liberar espaço para o novo elemento ele é inserido no nó.
+
+Exemplo: Adição de chaves em uma árvore de ordem M = 1
+
+                                            
+Chaves: 10, 4, 12                             |10|
+                                              /  \
+ |10| ->  |4| |10|  ->  |4| |10| |12|  ->   |4|  |12|	
+                          Overflow
+
+8) Descreva uma árvore B de ordem 2 gerada após a adição das respectivas chaves: 20, 15, 10, 3, 8, 4, 11, 5, 13, 18 e 1. 
+A descrição deve evidenciar quais chaves estão contidas em cada nó, bem como a relação de pai e filho dos nós
+
+1- Nó Raiz: possui a chave 8 e tem como filhos o nó A e B. 
+2- Nó A: É um filho da raiz, possui a chave 4 e tem como filhos os nós C e D.
+3- Nó B: É um filho da raiz, possui as chaves 11 e 15 e tem como filhos os nós E, F e G.
+4- Nó C: É um filho de A, possui as chaves 1 e 3, é um nó folha. 
+5- Nó D: É um filho de A, possui a chave 5, é um nó folha.
+6- Nó E: É um filho de B, possui a chave 10, é um nó folha. 
+7- Nó F: É um filho B, possui a chave 13, é um nó folha. 
+8- Nó G: É um filho B, possui as chaves 18 e 20, é um nó folha.
+
+            (Raiz)|8|
+         /             \
+        /               \
+       /                 \  
+ (A) |4|           (B) |11||15|    
+    /    \          /      /    \   
+   /      \        /      /      \   
+|1||3|    |5|    |10|   |13|   |18||20|
+  (C)     (D)    (E)    (F)      (G)
+
+
+

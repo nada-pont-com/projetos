@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "arvore-avl.h": "c"
+        "arvore-avl.h": "c",
+        "arvore-b.h": "c"
     }
 }

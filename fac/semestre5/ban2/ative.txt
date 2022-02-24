@@ -1,0 +1,84 @@
+SELECT t.name as musica,a.Title as album FROM tracks t
+JOIN albums a on a.AlbumId = t.AlbumId
+
+SELECT t.name as musica,a.Title as album,at.Name as artista FROM tracks t
+JOIN albums a on a.AlbumId = t.AlbumId
+JOIN artists at on a.ArtistId = at.ArtistId
+
+
+SELECT t.name as musica,
+	a.Title as album,
+	at.Name as artista,
+	g.Name as genero
+FROM tracks t
+JOIN albums a on a.AlbumId = t.AlbumId
+JOIN artists at on a.ArtistId = at.ArtistId
+JOIN genres g on g.GenreId = t.GenreId
+
+
+
+SELECT t.name as musica,
+	a.Title as album,
+	at.Name as artista,
+	g.Name as genero,
+	m.Name as media
+FROM tracks t
+JOIN albums a on a.AlbumId = t.AlbumId
+JOIN artists at on a.ArtistId = at.ArtistId
+JOIN genres g on g.GenreId = t.GenreId
+JOIN media_types m on m.MediaTypeId = t.MediaTypeId
+
+
+
+SELECT chefe.FirstName as chefe,
+	e.FirstName as empregado
+FROM employees e
+LEFT JOIN employees chefe on e.ReportsTo = chefe.employeeid
+
+
+SELECT count(t.name),g.name FROM genres g
+	JOIN tracks t on g.GenreId = t.GenreId
+GROUP BY g.name
+
+SELECT count(t.name),m.name FROM tracks t
+	JOIN media_types m on m.MediaTypeId= t.MediaTypeId
+GROUP BY m.name
+
+
+
+SELECT count(t.name),
+	g.name as genero,
+	a.name as artista
+	FROM artists a
+	join albums ab on ab.ArtistId = a.ArtistId
+	join tracks t on t.AlbumId = ab.AlbumId
+	JOIN genres g on g.GenreId = t.GenreId
+GROUP BY g.name,a.name
+Order by 3,2
+
+---- 9
+SELECT p.name,
+	COUNT(t.name)
+FROM playlists p
+JOIN playlist_track pt on p.PlaylistId = pt.PlaylistId
+JOIN tracks t on t.TrackId = pt.TrackId
+GROUP BY p.name
+
+--- 10
+
+SELECT p.name, g.name,
+	COUNT(t.name)
+FROM playlists p
+JOIN playlist_track pt on p.PlaylistId = pt.PlaylistId
+JOIN tracks t on t.TrackId = pt.TrackId AND t.GenreId = 1
+JOIN genres g on t.GenreId = g.GenreId
+GROUP BY g.name,p.name
+
+----11
+SELECT t.name,
+	COUNT(p.PlaylistId )
+FROM playlists p
+JOIN playlist_track pt on p.PlaylistId = pt.PlaylistId
+JOIN tracks t on t.TrackId = pt.TrackId
+GROUP BY t.name
+ORDER BY 2 desc LIMIT 3

@@ -1,0 +1,8 @@
+./android/.gitignore
+./android/local.properties
+./lib/application.dart
+./lib/main.dart
+./lib/objetos/load.dart
+./lib/objetos/notificacao.dart
+./pubspec.yaml
+./README.md

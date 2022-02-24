@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "arvore-rubro-negra.h"
 
 Arvore* criar() {
